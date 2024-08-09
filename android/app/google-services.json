@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117068542395",
+    "project_id": "mcquiz-4d434",
+    "storage_bucket": "mcquiz-4d434.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117068542395:android:fe2564abd3d40aae29949e",
+        "android_client_info": {
+          "package_name": "com.mcquiz.mcquizadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvyVOv-JqeKHfxzD2uFAvahH6synpqFfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
