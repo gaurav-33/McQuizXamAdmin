@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:mcquizadmin/Utils/tost_snackbar.dart';
 
 Future<FilePickerResult?> pickCsvFile() async {
   try {
@@ -19,6 +20,7 @@ Future<FilePickerResult?> pickCsvFile() async {
     }
   } catch (e) {
     // Handle any errors here
+    AppSnackBar.error("File: ${e.toString()}");
     if (kDebugMode) {
       print('Error while picking the file: $e');
     }
@@ -32,6 +34,7 @@ Future<List<List<dynamic>>> readCsvFile(String filePath) async {
     final mData = await file.readAsString();
     return const CsvToListConverter().convert(mData);
   } catch (e) {
+    AppSnackBar.error("File Reading: ${e.toString()}");
     if (kDebugMode) {
       print('Error reading CSV file: $e');
     }

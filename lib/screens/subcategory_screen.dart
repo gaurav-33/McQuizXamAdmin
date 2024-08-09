@@ -8,6 +8,7 @@ import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
 import '../services/upload_category_service.dart';
 import '../widgets/list_card_box.dart';
+import '../widgets/query_stream_builder.dart';
 
 class SubCategoryScreen extends StatelessWidget {
   SubCategoryScreen({super.key});
@@ -68,42 +69,34 @@ class SubCategoryScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: SizedBox(
         height: Get.height * 0.8,
-        child: StreamBuilder(
-            stream: _upload.fetchSubCategory(categoryId),
-            builder: (context, snapshot) {
-              List subcategoryDocs = snapshot.data?.docs ?? [];
-              if (subcategoryDocs.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Add SubCategory",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+        child: QueryStreamBuilder(
+          stream: _upload.fetchSubCategory(categoryId),
+          builder: (context, documents) {
+            return ListView.builder(
+              itemCount: documents?.length ?? 0,
+              itemBuilder: (context, index) {
+                final doc = documents![index];
+                final SubCategoryModel subcat = doc.data() as SubCategoryModel;
+                String subcatId = subcat.id;
+                return ListCardBox(
+                  title: subcat.name,
+                  subtitle: subcat.id,
+                  detail: DateFormat("dd-MM-yyyy h:mm a")
+                      .format(subcat.updatedAt.toDate()),
+                  deleteFunc: () => _deleteDialog(context, subcatId),
+                  editFunc: () => _displayUpdateDialog(context, subcat),
                 );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppTheme.allports950,
-                    strokeWidth: 3,
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                  itemCount: subcategoryDocs.length,
-                  itemBuilder: (context, index) {
-                    SubCategoryModel subcat = subcategoryDocs[index].data();
-                    String subcatId = subcategoryDocs[index].id;
-                    return ListCardBox(
-                      title: subcat.name,
-                      subtitle: subcat.id,
-                      detail: DateFormat("dd-MM-yyyy h:mm a")
-                          .format(subcat.updatedAt.toDate()),
-                      deleteFunc: () => _deleteDialog(context, subcatId),
-                      editFunc: () => _displayUpdateDialog(context, subcat),
-                    );
-                  });
-            }),
+              },
+            );
+          },
+          loadingWidget: const Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.allports800,
+                strokeWidth: 2,
+              )),
+          emptyWidget: const Center(child: Text('Add SubCategory')),
+          errorWidget: const Center(child: Text('Something went wrong')),
+        ),
       ),
     );
   }

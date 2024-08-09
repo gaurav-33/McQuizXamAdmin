@@ -8,6 +8,7 @@ import '../routes/app_routes.dart';
 import '../models/category_model.dart';
 import '../res/app_theme.dart';
 import '../services/upload_category_service.dart';
+import '../widgets/query_stream_builder.dart';
 
 class CategoryScreen extends StatelessWidget {
   CategoryScreen({super.key});
@@ -65,45 +66,36 @@ class CategoryScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: SizedBox(
         height: Get.height * 0.8,
-        child: StreamBuilder(
-            stream: _upload.fetchCategory(),
-            builder: (context, snapshot) {
-              List categoryDocs = snapshot.data?.docs ?? [];
-              if (categoryDocs.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Add Category",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+        child: QueryStreamBuilder(
+          stream: _upload.fetchCategory(),
+          builder: (context, documents) {
+            return ListView.builder(
+              itemCount: documents?.length ?? 0,
+              itemBuilder: (context, index) {
+                final doc = documents![index];
+                final CategoryModel cat = doc.data() as CategoryModel;
+                String catId = cat.id;
+                return ListCardBox(
+                  title: cat.name,
+                  subtitle: cat.id,
+                  detail: DateFormat("dd-MM-yyyy h:mm a")
+                      .format(cat.updatedAt.toDate()),
+                  deleteFunc: () => _deleteDialog(context, catId),
+                  onCardTap: () => Get.toNamed(AppRoutes.getSubCategoryRoute(),
+                      arguments: {"category_id": catId}),
+                  editFunc: () => _displayUpdateDialog(context, cat, catId),
                 );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppTheme.allports950,
-                    strokeWidth: 3,
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                  itemCount: categoryDocs.length,
-                  itemBuilder: (context, index) {
-                    CategoryModel cat = categoryDocs[index].data();
-                    String catId = categoryDocs[index].id;
-                    return ListCardBox(
-                      title: cat.name,
-                      subtitle: cat.id,
-                      detail: DateFormat("dd-MM-yyyy h:mm a")
-                          .format(cat.updatedAt.toDate()),
-                      deleteFunc: () => _deleteDialog(context, catId),
-                      onCardTap: () => Get.toNamed(
-                          AppRoutes.getSubCategoryRoute(),
-                          arguments: {"category_id": catId}),
-                      editFunc: () => _displayUpdateDialog(context, cat, catId),
-                    );
-                  });
-            }),
+              },
+            );
+          },
+          loadingWidget: const Center(
+              child: CircularProgressIndicator(
+            color: AppTheme.allports800,
+            strokeWidth: 2,
+          )),
+          emptyWidget: const Center(child: Text('Add Category')),
+          errorWidget: const Center(child: Text('Something went wrong')),
+        ),
       ),
     );
   }

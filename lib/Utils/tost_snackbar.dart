@@ -15,6 +15,6 @@ class AppSnackBar {
     Get.snackbar("Error", msg,
         backgroundColor: Colors.red.withOpacity(0.7),
         colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM);
+        snackPosition: SnackPosition.TOP);
   }
 }

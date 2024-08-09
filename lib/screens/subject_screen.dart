@@ -8,6 +8,7 @@ import '../Utils/tost_snackbar.dart';
 import '../widgets/list_card_box.dart';
 import '../routes/app_routes.dart';
 import '../res/app_theme.dart';
+import '../widgets/query_stream_builder.dart';
 
 class SubjectScreen extends StatelessWidget {
   SubjectScreen({super.key});
@@ -65,48 +66,41 @@ class SubjectScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: SizedBox(
         height: Get.height * 0.8,
-        child: StreamBuilder(
-            stream: _upload.fetchSubject(),
-            builder: (context, snapshot) {
-              List subjectDocs = snapshot.data?.docs ?? [];
-              if (subjectDocs.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Add Subject",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+        child: QueryStreamBuilder(
+          stream: _upload.fetchSubject(),
+          builder: (context, documents) {
+            return ListView.builder(
+              itemCount: documents?.length ?? 0,
+              itemBuilder: (context, index) {
+                final doc = documents![index];
+                final SubjectModel subject = doc.data() as SubjectModel;
+                String subjectId = subject.id;
+                return ListCardBox(
+                  title: subject.name,
+                  subtitle: subject.id,
+                  detail: DateFormat("dd-MM-yyyy h:mm a")
+                      .format(subject.updatedAt.toDate()),
+                  deleteFunc: () => _deleteDialog(context, subjectId),
+                  onCardTap: () => Get.toNamed(AppRoutes.getTopicRoute(),
+                      arguments: {
+                        "subject_id": subjectId,
+                        "subject_name": subject.name
+                      }),
+                  editFunc: () =>
+                      _displayDialogUpdate(context, subject, subjectId),
                 );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppTheme.allports950,
-                    strokeWidth: 3,
-                  ),
-                );
-              }
 
-              return ListView.builder(
-                  itemCount: subjectDocs.length,
-                  itemBuilder: (context, index) {
-                    SubjectModel subject = subjectDocs[index].data();
-                    String subjectId = subjectDocs[index].id;
-                    return ListCardBox(
-                      title: subject.name,
-                      subtitle: subject.id,
-                      detail: DateFormat("dd-MM-yyyy h:mm a")
-                          .format(subject.updatedAt.toDate()),
-                      deleteFunc: () => _deleteDialog(context, subjectId),
-                      onCardTap: () => Get.toNamed(AppRoutes.getTopicRoute(),
-                          arguments: {
-                            "subject_id": subjectId,
-                            "subject_name": subject.name
-                          }),
-                      editFunc: () =>
-                          _displayDialogUpdate(context, subject, subjectId),
-                    );
-                  });
-            }),
+              },
+            );
+          },
+          loadingWidget: const Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.allports800,
+                strokeWidth: 2,
+              )),
+          emptyWidget: const Center(child: Text('Add Subject')),
+          errorWidget: const Center(child: Text('Something went wrong')),
+        ),
       ),
     );
   }

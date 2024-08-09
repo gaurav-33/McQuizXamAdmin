@@ -40,10 +40,18 @@ class HomeScreen extends StatelessWidget {
                   height: Get.height * 0.05,
                 ),
                 RectButton(
+                    name: "Create Tests",
+                    icon: Icons.newspaper,
+                    ontap: () => Get.toNamed(AppRoutes.getCreateTestRoute())),
+                SizedBox(
+                  height: Get.height * 0.05,
+                ),
+
+                RectButton(
                     name: "Upload",
                     icon: Icons.cloud_upload_outlined,
                     ontap: () {
-                      // Get.toNamed(AppRoutes.getUploadRoute());
+                      // Get.toNamed(AppRoutes.getCreateTestRoute());
                     }),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mcquizadmin/screens/create_test_screen.dart';
 import 'package:mcquizadmin/screens/subject_screen.dart';
 import 'package:mcquizadmin/screens/topic_screen.dart';
 import 'package:mcquizadmin/screens/upload_question_screen.dart';
@@ -15,6 +16,7 @@ class AppRoutes {
   static String subject = "/subject";
   static String topic = "/topic";
   static String uploadQuestion = "/uploadQuestion";
+  static String createTest = "/createTest";
 
   static String getHomeRoute() => home;
   static String getCategoryRoute() => category;
@@ -23,6 +25,7 @@ class AppRoutes {
   static String getSubjectRoute() => subject;
   static String getTopicRoute() => topic;
   static String getUploadQuestionRoute() => uploadQuestion;
+  static String getCreateTestRoute() => createTest;
 
   static List<GetPage> routes = [
     GetPage(name: home, page: () => const HomeScreen()),
@@ -32,5 +35,6 @@ class AppRoutes {
     GetPage(name: subject, page: () => SubjectScreen()),
     GetPage(name: topic, page: () => TopicScreen()),
     GetPage(name: uploadQuestion, page: () => UploadQuestionScreen()),
+    GetPage(name: createTest, page: () => CreateTestScreen()),
   ];
 }

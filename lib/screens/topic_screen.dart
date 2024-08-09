@@ -10,6 +10,7 @@ import '../routes/app_routes.dart';
 import '../services/upload_category_service.dart';
 import '../services/upload_subject_service.dart';
 import '../widgets/list_card_box.dart';
+import '../widgets/query_stream_builder.dart';
 
 class TopicScreen extends StatelessWidget {
   TopicScreen({super.key});
@@ -70,50 +71,42 @@ class TopicScreen extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: SizedBox(
         height: Get.height * 0.8,
-        child: StreamBuilder(
-            stream: _upload.fetchTopic(subjectId),
-            builder: (context, snapshot) {
-              List topicDocs = snapshot.data?.docs ?? [];
-              if (topicDocs.isEmpty) {
-                return Center(
-                  child: Text(
-                    "Add Topic",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+        child: QueryStreamBuilder(
+          stream: _upload.fetchTopic(subjectId),
+          builder: (context, documents) {
+            return ListView.builder(
+              itemCount: documents?.length ?? 0,
+              itemBuilder: (context, index) {
+                final doc = documents![index];
+                final TopicModel topic = doc.data() as TopicModel;
+                String topicId = topic.id;
+                return ListCardBox(
+                  title: topic.name,
+                  subtitle: topic.id,
+                  detail: DateFormat("dd-MM-yyyy h:mm a")
+                      .format(topic.updatedAt.toDate()),
+                  deleteFunc: () => _deleteDialog(context, topicId),
+                  editFunc: () => _displayUpdateDialog(context, topic),
+                  onCardTap: () => Get.toNamed(
+                      AppRoutes.getUploadQuestionRoute(),
+                      arguments: {
+                        "subject_id": subjectId,
+                        "subject_name": subjectName,
+                        "topic_id": topicId,
+                        "topic_name": topic.name
+                      }),
                 );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppTheme.allports950,
-                    strokeWidth: 3,
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                  itemCount: topicDocs.length,
-                  itemBuilder: (context, index) {
-                    TopicModel topic = topicDocs[index].data();
-                    String topicId = topicDocs[index].id;
-                    return ListCardBox(
-                      title: topic.name,
-                      subtitle: topic.id,
-                      detail: DateFormat("dd-MM-yyyy h:mm a")
-                          .format(topic.updatedAt.toDate()),
-                      deleteFunc: () => _deleteDialog(context, topicId),
-                      editFunc: () => _displayUpdateDialog(context, topic),
-                      onCardTap: () => Get.toNamed(
-                          AppRoutes.getUploadQuestionRoute(),
-                          arguments: {
-                            "subject_id": subjectId,
-                            "subject_name": subjectName,
-                            "topic_id": topicId,
-                            "topic_name": topic.name
-                          }),
-                    );
-                  });
-            }),
+              },
+            );
+          },
+          loadingWidget: const Center(
+              child: CircularProgressIndicator(
+            color: AppTheme.allports800,
+            strokeWidth: 2,
+          )),
+          emptyWidget: const Center(child: Text('Add Topic')),
+          errorWidget: const Center(child: Text('Something went wrong')),
+        ),
       ),
     );
   }

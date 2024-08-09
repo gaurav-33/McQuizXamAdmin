@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseFirestore.instance.settings = const Settings(
-      // persistenceEnabled: true,
+      persistenceEnabled: true,
       );
   runApp(const MyApp());
 }
