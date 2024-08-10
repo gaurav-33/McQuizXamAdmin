@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                     name: "Upload",
                     icon: Icons.cloud_upload_outlined,
                     ontap: () {
-                      // Get.toNamed(AppRoutes.getCreateTestRoute());
+                      Get.toNamed(AppRoutes.getUploadRoute());
                     }),
               ],
             ),

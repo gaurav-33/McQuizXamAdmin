@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mcquizadmin/models/teacher_model.dart';
+import 'package:mcquizadmin/models/test_config_model.dart';
 import '../models/all_ques_model.dart';
 import '../models/subject_model.dart';
 import '../models/category_model.dart';
@@ -13,6 +15,8 @@ const String SUBJECT_COLLECT_REF = "subjects";
 const String TOPIC_COLLECT_REF = "topics";
 const String COUNTER_COLLECT_REF = "counters";
 const String ALLQUESTION_COLLECT_REF = "allquestions";
+const String TEACHERS_COLLET_REF = "teachers";
+const String TESTCONFIF_COLLECT_REF = "test_configs";
 
 class FirestoreRefService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -20,6 +24,8 @@ class FirestoreRefService {
   late final CollectionReference<SubjectModel> subjectcollectionref;
   late final CollectionReference<CounterModel> countercollectionref;
   late final CollectionReference<AllQuestionModel> allquestioncollectionref;
+  late final CollectionReference<TeacherModel> teacherscollectionref;
+  late final CollectionReference<TestConfigModel> testconfigcolelctionref;
 
   FirestoreRefService() {
     categorycollectionref = _firestore
@@ -40,6 +46,20 @@ class FirestoreRefService {
         .withConverter(
             fromFirestore: (snapshots, _) =>
                 CounterModel.fromJson(snapshots.data()!),
+            toFirestore: (data, _) => data.toJson());
+
+    teacherscollectionref = _firestore
+        .collection(TEACHERS_COLLET_REF)
+        .withConverter(
+            fromFirestore: (snapshots, _) =>
+                TeacherModel.fromJson(snapshots.data()!),
+            toFirestore: (data, _) => data.toJson());
+
+    testconfigcolelctionref = _firestore
+        .collection(TESTCONFIF_COLLECT_REF)
+        .withConverter(
+            fromFirestore: (snapshots, _) =>
+                TestConfigModel.fromJson(snapshots.data()!),
             toFirestore: (data, _) => data.toJson());
   }
 

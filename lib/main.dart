@@ -5,12 +5,15 @@ import 'package:mcquizadmin/res/app_theme.dart';
 import 'package:mcquizadmin/routes/app_routes.dart';
 import 'package:get/get.dart';
 
+import 'controllers/premission_contoller.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,
       );
+  Get.put(PermissionController());
   runApp(const MyApp());
 }
 

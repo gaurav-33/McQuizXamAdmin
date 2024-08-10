@@ -44,7 +44,7 @@ class AppDropDownBtn<T> extends StatelessWidget {
               items.add(
                 DropdownMenuItem<String>(
                   value: itemId,
-                  child: Text(itemName),
+                  child: Text(itemName, overflow: TextOverflow.visible,softWrap: true,),
                 ),
               );
             } else {
@@ -62,16 +62,17 @@ class AppDropDownBtn<T> extends StatelessWidget {
             : null;
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey, width: 2),
+            color: AppTheme.allports50,
+            border: Border.all(color: AppTheme.allports900, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
           child: DropdownButton<String>(
             borderRadius: BorderRadius.circular(40),
-            dropdownColor: Colors.white,
+            dropdownColor: AppTheme.allports100,
             isExpanded: true,
+            underline: const SizedBox(),
             hint: Text(
               hintText,
               style: const TextStyle(fontSize: 20),
