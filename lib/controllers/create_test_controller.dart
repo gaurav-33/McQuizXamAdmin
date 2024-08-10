@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import 'package:mcquizadmin/Utils/tost_snackbar.dart';
 import 'package:mcquizadmin/services/test_config_service.dart';
 import '../models/test_config_model.dart';
@@ -28,6 +29,8 @@ class CreateTestController extends GetxController {
   RxInt selectedQuestionCount = 0.obs;
   RxString selectedStatus = "".obs;
   RxString selectedTestType = "".obs;
+  RxString selectedQuestion = "".obs;
+  RxString selectedQuestionId = "".obs;
   late final FirestoreRefService _firestoreRefService;
 
   @override

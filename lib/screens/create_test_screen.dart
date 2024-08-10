@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mcquizadmin/models/all_ques_model.dart';
 import 'package:mcquizadmin/models/teacher_model.dart';
 import 'package:mcquizadmin/models/test_config_model.dart';
 import 'package:mcquizadmin/services/teacher_service.dart';
 import 'package:mcquizadmin/services/test_config_service.dart';
+import 'package:mcquizadmin/services/upload_question_service.dart';
 import 'package:mcquizadmin/widgets/drop_down_for_list.dart';
 import '../controllers/create_test_controller.dart';
 import '../models/category_model.dart';
@@ -21,6 +23,7 @@ class CreateTestScreen extends StatelessWidget {
   UploadCategoryServices _categoryServices = UploadCategoryServices();
   UploadSubjectServices _subjectServices = UploadSubjectServices();
   TeacherService _teacherService = TeacherService();
+  UploadQuestionServices _questionServices = UploadQuestionServices();
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +115,11 @@ class CreateTestScreen extends StatelessWidget {
                  const SizedBox(height: 20,),
                  _title("Status"),
                  _buildStatusDropdown(testConfig),
+                 const SizedBox(height: 20,),
+                 _title("Category"),
+                 (testController.selectedTopicId.value != "" && testController.selectedSubjectId.value != "")
+                     ? _buildQuestionDropdown()
+                     : const SizedBox(),
                ],
              ));
        }),
@@ -286,6 +294,19 @@ class CreateTestScreen extends StatelessWidget {
           testController.selectedStatus.value = value;
         }
       },
+    );
+  }
+
+  Widget _buildQuestionDropdown() {
+    return AppDropDownBtn<AllQuestionModel>(
+      stream: _questionServices.fetchAllQuestion(testController.selectedSubjectId.value, testController.selectedTopicId.value),
+      itemBuilder: (AllQuestionModel question) => question.questionText,
+      onChanged: (AllQuestionModel question, String id) {
+        testController.selectedQuestion.value = question.questionText;
+        testController.selectedQuestionId.value = id;
+      },
+      hintText: "Select Question",
+      selectedItemId: testController.selectedQuestionId.value,
     );
   }
 }

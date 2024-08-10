@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mcquizadmin/models/teacher_model.dart';
+import 'package:mcquizadmin/models/all_ques_model.dart';
 import 'package:mcquizadmin/services/teacher_service.dart';
+import 'package:mcquizadmin/services/upload_question_service.dart';
 import 'package:mcquizadmin/services/upload_subject_service.dart';
 import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
@@ -15,7 +17,7 @@ class UploadScreen extends StatelessWidget {
   UploadCategoryServices _uploadCategoryServices = UploadCategoryServices();
   UploadSubjectServices _uploadSubjectServices = UploadSubjectServices();
   TeacherService _teacherService = TeacherService();
-
+  UploadQuestionServices _questionServices = UploadQuestionServices();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,18 +48,12 @@ class UploadScreen extends StatelessWidget {
               // await _upload.uploadCat();
               // await _uploadCategoryServices.uploadCat();
               // await _uploadSubjectServices.uploadSub();
-              TeacherModel model = TeacherModel(
-                  name: "hello",
-                  email: "abcs@gmail.com",
-                  role: "role",
-                  id: "teacher_03");
-              await _teacherService.uploadTeacher(model);
             },
             child: const Text("Upload IT"),
           ),
           Expanded(
             child: StreamBuilder(
-                stream: _teacherService.fetchTeacher(),
+                stream: _questionServices.fetchAllQuestion("subject_05", "topic_01"),
                 builder: (context, snapshot) {
                   List categoryDocs = snapshot.data?.docs ?? [];
                   if (categoryDocs.isEmpty) {
@@ -82,12 +78,12 @@ class UploadScreen extends StatelessWidget {
                   return ListView.builder(
                       itemCount: categoryDocs.length,
                       itemBuilder: (context, index) {
-                        TeacherModel cat = categoryDocs[index].data();
+                        AllQuestionModel cat = categoryDocs[index].data();
                         return Card(
                           color: Colors.grey[350],
                           child: ListTile(
                             onTap: () {},
-                            title: Text(cat.name),
+                            title: Text(cat.questionText),
                             // subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
                             //     .format(cat.updatedAt.toDate())),
                             trailing: Text(cat.id),

@@ -18,8 +18,8 @@ import '../routes/app_routes.dart';
 class UploadQuestionScreen extends StatelessWidget {
   UploadQuestionScreen({super.key});
 
-  final UploadProgressController progressController =
-      Get.put(UploadProgressController());
+  final UploadProgressController progressController = Get.find<UploadProgressController>();
+
   final String subjectId = Get.arguments["subject_id"];
   final String subject = Get.arguments["subject_name"];
   final String topicId = Get.arguments["topic_id"];

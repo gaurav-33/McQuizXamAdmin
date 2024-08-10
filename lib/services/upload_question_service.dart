@@ -33,8 +33,8 @@ class UploadQuestionServices {
     }
   }
 
-  Stream<QuerySnapshot> fetchAllQuestion(String subjectId) {
-    return _firestoreRefService.getTopicRef(subjectId).snapshots();
+  Stream<QuerySnapshot> fetchAllQuestion(String subjectId, String topicId) {
+    return _firestoreRefService.getAllQuesRef(subjectId, topicId).snapshots();
   }
 
   void updateQuestion(AllQuestionModel questionModel) async {
