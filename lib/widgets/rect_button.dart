@@ -9,13 +9,16 @@ class RectButton extends StatelessWidget {
       this.icon,
       this.ontap,
       this.height,
-      this.width});
+      this.width,
+      this.iconSize
+      });
 
   final String name;
   final IconData? icon;
   final VoidCallback? ontap;
   final double? height;
   final double? width;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class RectButton extends StatelessWidget {
             icon != null
                 ? Icon(
                     icon,
-                    size: Get.width * 0.1,
+                    size: iconSize ?? Get.width * 0.1,
                     color: AppTheme.allports100,
                   )
                 : const SizedBox(),

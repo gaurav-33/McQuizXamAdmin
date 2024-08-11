@@ -6,7 +6,7 @@ import 'package:mcquizadmin/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 import 'controllers/premission_contoller.dart';
-import 'controllers/upload_progess_controller.dart';
+import 'controllers/upload_progress_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +15,7 @@ void main() async {
       persistenceEnabled: true,
       );
   Get.put(PermissionController());
-  Get.lazyPut(()=>UploadProgressController());
+  Get.put(UploadProgressController());
   runApp(const MyApp());
 }
 

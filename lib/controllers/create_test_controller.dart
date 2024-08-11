@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:mcquizadmin/Utils/tost_snackbar.dart';
+import 'package:mcquizadmin/models/test_paper_model.dart';
 import 'package:mcquizadmin/services/test_config_service.dart';
+import '../models/all_ques_model.dart';
 import '../models/test_config_model.dart';
 import '../services/firestore_ref_service.dart';
+import '../services/upload_question_service.dart';
 
 class CreateTestController extends GetxController {
   RxList categoryList = [].obs;
@@ -31,6 +31,14 @@ class CreateTestController extends GetxController {
   RxString selectedTestType = "".obs;
   RxString selectedQuestion = "".obs;
   RxString selectedQuestionId = "".obs;
+  RxBool fieldsChecked = false.obs;
+  RxList<AllQuestionModel> questionList = <AllQuestionModel>[].obs;
+  RxList<AllQuestionModel> selectedQuestionList = <AllQuestionModel>[].obs;
+  var searchQuery = ''.obs;
+  RxList<AllQuestionModel> filteredQuestionList = <AllQuestionModel>[].obs;
+
+
+  final UploadQuestionServices _questionServices = UploadQuestionServices();
   late final FirestoreRefService _firestoreRefService;
 
   @override
@@ -39,12 +47,88 @@ class CreateTestController extends GetxController {
     super.onInit();
     _firestoreRefService = FirestoreRefService();
     fetchTestConfig();
+    debounce(searchQuery, (_) => filterQuestions(), time: Duration(milliseconds: 300));
+  }
+
+  // check all the fields
+  void checkAllFields() {
+    fieldsChecked.value = selectedCategoryId.value != "" ? true : false;
+    fieldsChecked.value = selectedSubCatId.value != "" ? true : false;
+    fieldsChecked.value = selectedSubjectId.value != "" ? true : false;
+    fieldsChecked.value = selectedTopicId.value != "" ? true : false;
+    fieldsChecked.value = selectedTeacherId.value != "" ? true : false;
+    fieldsChecked.value = selectedDuration.value != 0 ? true : false;
+    fieldsChecked.value = selectedEachMark.value != 0 ? true : false;
+    fieldsChecked.value = selectedQuestionCount.value != 0 ? true : false;
+    fieldsChecked.value = selectedStatus.value != "" ? true : false;
+    fieldsChecked.value = selectedTestType.value != "" ? true : false;
+    fieldsChecked.value = selectedQuestion.value != "" ? true : false;
+
+    // selectedNegativeMark.value != "";
+
+    if (fieldsChecked.value == true) {
+      // MockTestModel mockTestModel = MockTestModel(
+      //     owner: selectedTeacher.value,
+      //     id: ,
+      //     categoryId: categoryId,
+      //     subcategoryId: subcategoryId,
+      //     title: title,
+      //     description: description,
+      //     duration: duration,
+      //     totalMarks: totalMarks,
+      //     negativeMarking: negativeMarking,
+      //     status: status,
+      //     examType: examType,
+      //     numberOfQuestions: numberOfQuestions,
+      //     createdAt: createdAt,
+      //     updatedAt: updatedAt);
+    }
+  }
+
+  Future<void> getAllQuestions() async {
+    var dataStream = _questionServices.fetchAllQuestion(
+        selectedSubjectId.value, selectedTopicId.value);
+
+    await for (var data in dataStream) {
+      if (data.docs.isEmpty) {
+        questionList.clear();
+      } else {
+        questionList.value = data.docs.map((doc) {
+          return doc.data() as AllQuestionModel;
+        }).toList();
+      }
+      // Initial load, all questions should be displayed
+      filteredQuestionList.assignAll(questionList);
+    }
+  }
+  void filterQuestions() {
+    if (searchQuery.isEmpty) {
+      filteredQuestionList.assignAll(questionList);
+    } else {
+      filteredQuestionList.assignAll(
+        questionList.where((q) =>
+            q.questionText.toLowerCase().contains(searchQuery.value.toLowerCase())
+        ).toList(),
+      );
+    }
+  }
+  void toggleQuestionSelection(AllQuestionModel question) {
+    if (selectedQuestionList.contains(question)) {
+      selectedQuestionList.remove(question);
+      selectedQuestionCount.value++;
+    } else {
+      selectedQuestionList.add(question);
+      selectedQuestionCount.value--;
+    }
+    print(selectedQuestionCount.value);
   }
 
   Future<void> fetchTestConfig() async {
     try {
-      DocumentSnapshot<TestConfigModel> snapshot =
-      await _firestoreRefService.testconfigcolelctionref.doc('settings').get();
+      DocumentSnapshot<TestConfigModel> snapshot = await _firestoreRefService
+          .testconfigcolelctionref
+          .doc('settings')
+          .get();
 
       if (snapshot.exists) {
         testConfig.value = snapshot.data();

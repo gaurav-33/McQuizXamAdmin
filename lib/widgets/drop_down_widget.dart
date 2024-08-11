@@ -9,7 +9,6 @@ import '../res/app_theme.dart';
 typedef ItemBuilder<T> = String Function(T item);
 typedef OnChangedCallback<T> = void Function(T item, String id);
 
-
 class AppDropDownBtn<T> extends StatelessWidget {
   final Stream<QuerySnapshot<Object?>> stream;
   final ItemBuilder<T> itemBuilder;
@@ -18,6 +17,7 @@ class AppDropDownBtn<T> extends StatelessWidget {
   final String selectedItemId;
 
   AppDropDownBtn({
+    super.key,
     required this.stream,
     required this.itemBuilder,
     required this.onChanged,
@@ -44,7 +44,16 @@ class AppDropDownBtn<T> extends StatelessWidget {
               items.add(
                 DropdownMenuItem<String>(
                   value: itemId,
-                  child: Text(itemName, overflow: TextOverflow.visible,softWrap: true,),
+                  child: Column(
+                    children: [
+                      Text(
+                        itemName,
+                      ),
+                      const Divider(
+                        color: AppTheme.allports50, height: 0.5,
+                      )
+                    ],
+                  ),
                 ),
               );
             } else {
@@ -57,12 +66,13 @@ class AppDropDownBtn<T> extends StatelessWidget {
         }
 
         // Check if selectedItemId is in the list of item IDs
-        final String? currentValue = items.any((item) => item.value == selectedItemId)
-            ? selectedItemId
-            : null;
+        final String? currentValue =
+            items.any((item) => item.value == selectedItemId)
+                ? selectedItemId
+                : null;
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20,),
           decoration: BoxDecoration(
             color: AppTheme.allports50,
             border: Border.all(color: AppTheme.allports900, width: 2),
@@ -71,6 +81,7 @@ class AppDropDownBtn<T> extends StatelessWidget {
           child: DropdownButton<String>(
             borderRadius: BorderRadius.circular(40),
             dropdownColor: AppTheme.allports100,
+            itemHeight: null,
             isExpanded: true,
             underline: const SizedBox(),
             hint: Text(
@@ -91,8 +102,16 @@ class AppDropDownBtn<T> extends StatelessWidget {
         );
       },
       loadingWidget: const Center(child: CircularProgressIndicator()),
-      emptyWidget: const Center(child: Text('No items available', style: TextStyle(color: AppTheme.allports500),)),
-      errorWidget: const Center(child: Text('Something went wrong', style: TextStyle(color: AppTheme.allports500),)),
+      emptyWidget: const Center(
+          child: Text(
+        'No items available',
+        style: TextStyle(color: AppTheme.allports500),
+      )),
+      errorWidget: const Center(
+          child: Text(
+        'Something went wrong',
+        style: TextStyle(color: AppTheme.allports500),
+      )),
     );
   }
 }

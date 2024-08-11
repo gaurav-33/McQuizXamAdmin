@@ -7,7 +7,7 @@ class AppSnackBar {
     Get.snackbar("Success", msg,
         backgroundColor: Colors.green.withOpacity(0.7),
         colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM);
+        snackPosition: SnackPosition.TOP);
   }
 
 // error

@@ -6,7 +6,7 @@ import '../Utils/counter_util.dart';
 import '../Utils/file_picker_util.dart';
 import '../models/all_ques_model.dart';
 import '../services/counter_service.dart';
-import '../controllers/upload_progess_controller.dart';
+import '../controllers/upload_progress_controller.dart';
 
 import 'firestore_ref_service.dart';
 
@@ -66,12 +66,12 @@ class UploadQuestionServices {
       final String oldQuesId = await CounterService().fetchCounter();
       late String newQuesId = oldQuesId;
 
-      progressController.resetProgress();
+      progressController.progress.value =0;
       final int csvLength = csvData.length;
 
       for (var i = 1; i < csvData.length; i++) {
         newQuesId = await counterUtil.incrementId(newQuesId, 1);
-        progressController.setQuesId(newQuesId);
+        progressController.quesId.value = newQuesId;
         final String opTxt1 = csvData[i][1].toString();
         final String opTxt2 = csvData[i][2].toString();
         final String opTxt3 = csvData[i][3].toString();
@@ -106,18 +106,20 @@ class UploadQuestionServices {
             difficulty: "easy",
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now());
-
+        progressController.isUploading.value = true;
         await uploadAllQuestion(tempQues);
         optionsList.clear();
-        progressController.updateProgress(i / csvLength);
+        progressController.progress.value = (i / csvLength);
         await Future.delayed(const Duration(milliseconds: 10));
-        progressController.resetQuesId();
+        progressController.progress.value = 0;
       }
       await counterService.uploadCounter(newQuesId);
+      progressController.isUploading.value = false;
 
       progressController.resetAll();
       AppSnackBar.success("Uploaded All Question");
     } catch (e) {
+      progressController.isUploading.value = false;
       progressController.resetAll();
       AppSnackBar.error(e.toString());
       if (kDebugMode) {
