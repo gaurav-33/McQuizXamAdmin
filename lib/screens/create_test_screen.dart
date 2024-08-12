@@ -34,10 +34,10 @@ class CreateTestScreen extends StatelessWidget {
         title: const Text(
           "MCQUIZ ADMIN",
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: AppTheme.allports100,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getHomeRoute());
@@ -49,21 +49,28 @@ class CreateTestScreen extends StatelessWidget {
           final testConfig = testController.testConfig.value;
 
           return testController.testConfig.value == null
-              ? const CircularProgressIndicator()
+              ? Center(child: const CircularProgressIndicator())
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
-                      Text(
-                        "Create Test",
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
+                      Text("Create Tests",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20)),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
                       _title("Category"),
                       _buildCategoryDropdown(),
                       const SizedBox(
@@ -73,18 +80,18 @@ class CreateTestScreen extends StatelessWidget {
                       testController.selectedCategoryId.value != ""
                           ? _buildSubCategoryDropdown()
                           : const SizedBox(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _title("Subject"),
-                      _buildSubjectDropdown(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _title("Topic"),
-                      testController.selectedSubjectId.value != ""
-                          ? _buildTopicDropdown()
-                          : const SizedBox(),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      // _title("Subject"),
+                      // _buildSubjectDropdown(),
+                      // const SizedBox(
+                      //   height: 20,
+                      // ),
+                      // _title("Topic"),
+                      // testController.selectedSubjectId.value != ""
+                      //     ? _buildTopicDropdown()
+                      //     : const SizedBox(),
                       const SizedBox(
                         height: 20,
                       ),
@@ -123,18 +130,27 @@ class CreateTestScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Question"),
-                      (testController.selectedTopicId.value != "" &&
-                              testController.selectedSubjectId.value != "")
-                          ? RectButton(
-                              name: "Questions",
-                              height: Get.height * 0.06,
-                              width: Get.width * 0.5,
-                              ontap: () {
-                                _showQuestionDialog();
-                              },
-                            ) //_buildQuestionDropdown()
-                          : const SizedBox(),
+                      // _title("Question"),
+                      // (testController.selectedTopicId.value != "" &&
+                      //         testController.selectedSubjectId.value != "")
+                      //     ? RectButton(
+                      //         name: "Questions",
+                      //         height: Get.height * 0.06,
+                      //         width: Get.width * 0.5,
+                      //         ontap: () {
+                      //           _showQuestionDialog(context);
+                      //         },
+                      //       )
+                      //     : const SizedBox(),
+
+                      RectButton(
+                        name: "Questions",
+                        height: Get.height * 0.06,
+                        width: Get.width * 0.5,
+                        ontap: () {
+                          _showQuestionDialog(context);
+                        },
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -152,7 +168,7 @@ class CreateTestScreen extends StatelessWidget {
   Widget _title(String title) {
     return Text(
       title,
-      style: const TextStyle(color: AppTheme.allports900, fontSize: 15),
+      style: const TextStyle(color: AppTheme.darkColor, fontSize: 15),
     );
   }
 
@@ -339,85 +355,103 @@ class CreateTestScreen extends StatelessWidget {
   //   );
   // }
 
-  void _showQuestionDialog() async {
-    testController.getAllQuestions();
+  void _showQuestionDialog(BuildContext context) async {
+    // testController.getAllQuestions();
+    final theme = Theme.of(context);
     Get.bottomSheet(
-        backgroundColor: AppTheme.allports100,
+        isScrollControlled: true,
+        ignoreSafeArea: true,
+        backgroundColor: theme.cardColor,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-          child: Column(
-            children: [
-              Obx(
-                () => Text(
-                  "Questions Left: ${testController.selectedQuestionCount.value}",
-                  style: const TextStyle(color: AppTheme.allports900),
-                ),
-              ),
-              TextFormField(
-                controller: _searchedText,
-                onChanged: (value) {
-                  testController.searchQuery.value = value;
-                },
-                style: const TextStyle(color: AppTheme.allports950),
-                decoration: InputDecoration(
-                    hintText: "Search Ques...",
-                    hintStyle: const TextStyle(color: AppTheme.allports300),
-                    fillColor: AppTheme.allports50,
-                    filled: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: AppTheme.allports900, width: 2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: AppTheme.allports200, width: 2),
-                      borderRadius: BorderRadius.circular(20),
-                    )),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Obx(() {
-                  if (testController.filteredQuestionList.isEmpty) {
-                    return const Text(
-                      "No Question Found",
-                      style: TextStyle(color: AppTheme.allports900),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: testController.filteredQuestionList.length,
-                      itemBuilder: (context, index) {
-                        final questionModel =
-                            testController.filteredQuestionList[index];
-                        return Card(
-                          color: AppTheme.allports200,
-                          child: ListTile(
-                            title: Text(
-                              questionModel.questionText,
-                              style:
-                                  const TextStyle(color: AppTheme.allports900),
-                            ),
-                            onTap: () {
-                              testController.selectedQuestionCount > 0
-                                  ? testController
-                                      .toggleQuestionSelection(questionModel)
-                                  : AppSnackBar.error("Question Limit Reached");
-                            },
-                            trailing: Obx(() => Icon(
-                                  testController.selectedQuestionList
-                                          .contains(questionModel)
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                  color: AppTheme.allports900,
-                                )),
-                          ),
-                        );
+          child: Obx(
+            () {
+              return Column(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Get.back();
                       },
-                    );
-                  }
-                }),
-              ),
-            ],
+                      icon: Icon(Icons.transit_enterexit_rounded)),
+                  _title("Subject"),
+                  _buildSubjectDropdown(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Questions Left: ${testController.selectedQuestionCount.value}",
+                    // style: const TextStyle(color: AppTheme.darkColor),
+                  ),
+                  _title("Topic"),
+                  testController.selectedSubjectId.value == ""
+                      ? const SizedBox()
+                      : TextFormField(
+                          controller: _searchedText,
+                          onChanged: (value) {
+                            testController.searchQuery.value = value;
+                          },
+                          // style:  TextStyle(color: AppTheme.darkColor),
+                          decoration: InputDecoration(
+                            hintText: "Search Ques...",
+                            // fillColor: AppTheme.lightColor,
+                            // filled: true,
+                            // focusedBorder: OutlineInputBorder(
+                            //   borderSide: const BorderSide(
+                            //       // color: AppTheme.darkColor,
+                            //       width: 2),
+                            //   borderRadius: BorderRadius.circular(20),
+                            // ),
+                            // enabledBorder: OutlineInputBorder(
+                            //   borderSide: const BorderSide(
+                            //       // color: AppTheme.accentColor,
+                            //       width: 2),
+                            //   borderRadius: BorderRadius.circular(20),
+                            // )
+                          ),
+                        ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Obx(() {
+                      if (testController.filteredQuestionList.isEmpty) {
+                        return const Text(
+                          "No Question Found",
+                          style: TextStyle(color: AppTheme.darkColor),
+                        );
+                      } else {
+                        return ListView.builder(
+                          itemCount: testController.filteredQuestionList.length,
+                          itemBuilder: (context, index) {
+                            final questionModel =
+                                testController.filteredQuestionList[index];
+                            return Card(
+                              color: AppTheme.accentColor,
+                              child: ListTile(
+                                title: Text(
+                                  questionModel.questionText,
+                                  style: const TextStyle(
+                                      color: AppTheme.darkColor),
+                                ),
+                                onTap: () {
+                                  testController
+                                      .toggleQuestionSelection(questionModel);
+                                },
+                                trailing: Obx(() => Icon(
+                                      testController
+                                              .isQuestionSelected(questionModel)
+                                          ? Icons.check_box
+                                          : Icons.check_box_outline_blank,
+                                      color: AppTheme.darkColor,
+                                    )),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    }),
+                  ),
+                ],
+              );
+            },
           ),
         ));
   }

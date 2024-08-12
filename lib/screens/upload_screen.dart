@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +27,7 @@ class UploadScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: AppTheme.allports100,
+            color: AppTheme.lightColor,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getHomeRoute());
@@ -53,7 +52,8 @@ class UploadScreen extends StatelessWidget {
           ),
           Expanded(
             child: StreamBuilder(
-                stream: _questionServices.fetchAllQuestion("subject_05", "topic_01"),
+                stream: _questionServices.fetchAllQuestion(
+                    "subject_05", "topic_01"),
                 builder: (context, snapshot) {
                   List categoryDocs = snapshot.data?.docs ?? [];
                   if (categoryDocs.isEmpty) {
@@ -80,10 +80,13 @@ class UploadScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         AllQuestionModel cat = categoryDocs[index].data();
                         return Card(
-                          color: Colors.grey[350],
+                          // color: Colors.grey[350],
                           child: ListTile(
                             onTap: () {},
-                            title: Text(cat.questionText),
+                            title: Text(
+                              cat.questionText,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                             // subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
                             //     .format(cat.updatedAt.toDate())),
                             trailing: Text(cat.id),

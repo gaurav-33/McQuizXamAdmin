@@ -27,6 +27,7 @@ class AppDropDownBtn<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return QueryStreamBuilder(
       stream: stream,
       builder: (context, documents) {
@@ -48,10 +49,8 @@ class AppDropDownBtn<T> extends StatelessWidget {
                     children: [
                       Text(
                         itemName,
+                        style: TextStyle(color: theme.primaryColor),
                       ),
-                      const Divider(
-                        color: AppTheme.allports50, height: 0.5,
-                      )
                     ],
                   ),
                 ),
@@ -72,21 +71,23 @@ class AppDropDownBtn<T> extends StatelessWidget {
                 : null;
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20,),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
           decoration: BoxDecoration(
-            color: AppTheme.allports50,
-            border: Border.all(color: AppTheme.allports900, width: 2),
+            color: theme.cardColor,
+            border: Border.all(color: theme.primaryColor, width: 2),
             borderRadius: BorderRadius.circular(15),
           ),
           child: DropdownButton<String>(
             borderRadius: BorderRadius.circular(40),
-            dropdownColor: AppTheme.allports100,
+            dropdownColor: theme.secondaryHeaderColor,
             itemHeight: null,
             isExpanded: true,
             underline: const SizedBox(),
             hint: Text(
               hintText,
-              style: const TextStyle(fontSize: 20),
+              style: TextStyle(color: theme.hintColor),
             ),
             value: currentValue,
             items: items,
@@ -102,15 +103,12 @@ class AppDropDownBtn<T> extends StatelessWidget {
         );
       },
       loadingWidget: const Center(child: CircularProgressIndicator()),
-      emptyWidget: const Center(
-          child: Text(
-        'No items available',
-        style: TextStyle(color: AppTheme.allports500),
-      )),
-      errorWidget: const Center(
+      emptyWidget: Center(
+          child: Text('No items available', style: theme.textTheme.bodyMedium)),
+      errorWidget: Center(
           child: Text(
         'Something went wrong',
-        style: TextStyle(color: AppTheme.allports500),
+        style: theme.textTheme.bodyMedium,
       )),
     );
   }

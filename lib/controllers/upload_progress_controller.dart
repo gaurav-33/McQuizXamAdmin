@@ -7,7 +7,6 @@ class UploadProgressController extends GetxController {
   RxBool isUploading = false.obs;
   RxString quesId = "".obs;
 
-
   void resetAll() {
     if (isUploading.value == true) {
       fileName.value = "";

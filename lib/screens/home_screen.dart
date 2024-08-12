@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
           title: const Text(
             "MCQUIZ ADMIN",
           ),
+          centerTitle: true,
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -23,7 +24,15 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: Get.height * 0.05,
+                  height: Get.height * 0.02,
+                ),
+                Text("Home",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20)),
+                SizedBox(
+                  height: Get.height * 0.01,
                 ),
                 RectButton(
                     name: "Category & SUbCategory",
@@ -46,7 +55,6 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: Get.height * 0.05,
                 ),
-
                 RectButton(
                     name: "Upload",
                     icon: Icons.cloud_upload_outlined,

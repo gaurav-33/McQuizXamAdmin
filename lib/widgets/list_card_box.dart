@@ -21,6 +21,7 @@ class ListCardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Padding(
@@ -28,9 +29,9 @@ class ListCardBox extends StatelessWidget {
           child: Container(
             height: Get.height * 0.15,
             width: Get.width,
-            decoration: const BoxDecoration(
-                color: AppTheme.allports800,
-                borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+                color: theme.highlightColor,
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25),
                     topRight: Radius.circular(10),
@@ -50,20 +51,19 @@ class ListCardBox extends StatelessWidget {
                         child: Text(
                           title,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      Text(subtitle,
-                          style: Theme.of(context).textTheme.bodyMedium),
+                      Text(subtitle, style: theme.textTheme.bodyMedium),
                       const SizedBox(
                         height: 5,
                       ),
                       Text(
                         detail,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: theme.textTheme.bodySmall,
                       ),
                     ],
                   ),
@@ -74,19 +74,22 @@ class ListCardBox extends StatelessWidget {
                       children: [
                         InkWell(
                             onTap: deleteFunc,
-                            child: const Icon(
+                            child: Icon(
                               Icons.delete_outline_rounded,
+                              color: theme.primaryColor,
                             )),
                         InkWell(
                             onTap: editFunc,
-                            child: const Icon(
+                            child: Icon(
                               Icons.edit_rounded,
+                              color: theme.primaryColor,
                             )),
                         onCardTap != null
                             ? InkWell(
                                 onTap: onCardTap ?? () {},
-                                child: const Icon(
+                                child: Icon(
                                   Icons.arrow_forward_rounded,
+                                  color: theme.primaryColor,
                                 ))
                             : const SizedBox(),
                       ],

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mcquizadmin/models/subject_model.dart';
 import 'package:mcquizadmin/services/upload_subject_service.dart';
 import '../Utils/tost_snackbar.dart';
+import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../routes/app_routes.dart';
 import '../res/app_theme.dart';
@@ -21,6 +22,7 @@ class SubjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -29,7 +31,6 @@ class SubjectScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: AppTheme.allports100,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getHomeRoute());
@@ -42,18 +43,21 @@ class SubjectScreen extends StatelessWidget {
         },
         child: const Icon(
           Icons.add,
-          color: AppTheme.allports800,
         ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-            height: Get.height * 0.06,
-            child: Text(
-              "Subjects",
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text("Subjects",
+              style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          const SizedBox(
+            height: 10,
           ),
           Expanded(child: _buildUI()),
         ],
@@ -89,15 +93,13 @@ class SubjectScreen extends StatelessWidget {
                   editFunc: () =>
                       _displayDialogUpdate(context, subject, subjectId),
                 );
-
               },
             );
           },
           loadingWidget: const Center(
               child: CircularProgressIndicator(
-                color: AppTheme.allports800,
-                strokeWidth: 2,
-              )),
+            strokeWidth: 2,
+          )),
           emptyWidget: const Center(child: Text('Add Subject')),
           errorWidget: const Center(child: Text('Something went wrong')),
         ),
@@ -106,89 +108,37 @@ class SubjectScreen extends StatelessWidget {
   }
 
   void _displayDialog(BuildContext context) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Add Subject",
-                  style: Theme.of(context).textTheme.titleMedium),
-              TextField(
-                controller: _idcontroller,
-                decoration: const InputDecoration(hintText: "Id (subject_1)"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _namecontroller,
-                decoration: const InputDecoration(hintText: "Name"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _descriptioncontroller,
-                decoration: const InputDecoration(hintText: "Description"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _imageUrlcontroller,
-                decoration: const InputDecoration(hintText: "ImageUrl"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      _imageUrlcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                      Get.back();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Add"),
-                    onPressed: () {
-                      _upload.uploadSubject(SubjectModel(
-                          id: _idcontroller.text.toString(),
-                          name: _namecontroller.text.toString(),
-                          description: _descriptioncontroller.text.toString(),
-                          imageUrl: _imageUrlcontroller.text.toString(),
-                          createdAt: Timestamp.now(),
-                          updatedAt: Timestamp.now()));
-
-                      Get.back();
-                      AppSnackBar.success("Added Subject");
-                      _imageUrlcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+      backgroundColor: theme.cardColor,
+      CustomDialogForm(
+        title: "Add Subject",
+        idController: _idcontroller,
+        nameController: _namecontroller,
+        descriptionController: _descriptioncontroller,
+        imageUrlController: _imageUrlcontroller,
+        idHint: "Id(subject_01)",
+        onSave: () {
+          // Create a new TopicModel with the data from the controllers
+          SubjectModel newSubject = SubjectModel(
+            id: _idcontroller.text.toString(),
+            name: _namecontroller.text.toString(),
+            description: _descriptioncontroller.text.toString(),
+            imageUrl: _imageUrlcontroller.text.toString(),
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+          );
+          _upload.uploadSubject(newSubject); // Upload the new topic
+          Get.back(); // Close the bottom sheet
+          AppSnackBar.success("Added Subject"); // Show success message
+          _clearControllers(); // Clear all the controllers
+        },
+        onCancel: () {
+          Get.back(); // Close the bottom sheet
+          _clearControllers(); // Clear all the controllers
+        },
+      ),
+    );
   }
 
   void _displayDialogUpdate(
@@ -197,133 +147,58 @@ class SubjectScreen extends StatelessWidget {
     _descriptioncontroller.text = subject.description;
     _namecontroller.text = subject.name;
     _idcontroller.text = subject.id;
-
     Get.bottomSheet(
-        isDismissible: false,
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Update Subject",
-                  style: Theme.of(context).textTheme.titleMedium),
-              TextField(
-                controller: _idcontroller,
-                decoration: const InputDecoration(hintText: "Id (subject_1)"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _namecontroller,
-                decoration: const InputDecoration(hintText: "Name"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _descriptioncontroller,
-                decoration: const InputDecoration(hintText: "Description"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _imageUrlcontroller,
-                decoration: const InputDecoration(hintText: "ImageUrl"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      Get.back();
-                      _imageUrlcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Update"),
-                    onPressed: () {
-                      SubjectModel updatedSubject = subject.copyWith(
-                          id: _idcontroller.text.toString(),
-                          name: _namecontroller.text.toString(),
-                          description: _descriptioncontroller.text.toString(),
-                          imageUrl: _imageUrlcontroller.text.toString(),
-                          updatedAt: Timestamp.now());
-                      _upload.updateSubject(subjectId, updatedSubject);
+      backgroundColor: Theme.of(context).cardColor,
+      CustomDialogForm(
+        title: "Update Subject",
+        idController: _idcontroller,
+        nameController: _namecontroller,
+        descriptionController: _descriptioncontroller,
+        imageUrlController: _imageUrlcontroller,
+        dynamicHint: "Subject (subject_01)", // Example of dynamic hint
+        onSave: () {
+          SubjectModel updatedSubject = subject.copyWith(
+            id: _idcontroller.text.toString(),
+            name: _namecontroller.text.toString(),
+            description: _descriptioncontroller.text.toString(),
+            imageUrl: _imageUrlcontroller.text.toString(),
+            updatedAt: Timestamp.now(),
+          );
+          _upload.updateSubject(subjectId, updatedSubject);
+          Get.back();
+          AppSnackBar.success("Updated Subject");
+          _clearControllers();
+        },
+        onCancel: () {
+          Get.back();
+          _clearControllers();
+        },
+      ),
+    );
+  }
 
-                      Get.back();
-                      AppSnackBar.success("Updated Subject");
-                      _imageUrlcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+  void _clearControllers() {
+    _imageUrlcontroller.clear();
+    _idcontroller.clear();
+    _descriptioncontroller.clear();
+    _idcontroller.clear();
+    _namecontroller.clear();
   }
 
   void _deleteDialog(BuildContext context, String subjectId) {
     Get.bottomSheet(
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Want to Delete it?",
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Delete"),
-                    onPressed: () {
-                      _upload.deleteSubject(subjectId);
-
-                      Get.back();
-                      AppSnackBar.error("Deleted Subject");
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+      backgroundColor: Theme.of(context).cardColor,
+      CustomDialogForm(
+        title: "Want to Delete it?",
+        onCancel: () {
+          Get.back();
+        },
+        onSave: () {
+          _upload.deleteSubject(subjectId);
+          Get.back();
+          AppSnackBar.error("Deleted");
+        },
+      ),
+    );
   }
 }

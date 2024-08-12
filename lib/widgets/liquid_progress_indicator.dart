@@ -55,12 +55,12 @@ class LiquidPainter extends CustomPainter {
     Paint paint = Paint()
       ..shader = const SweepGradient(
               colors: [
-                // Color(0xffFF7A01),
-                // Color(0xffFF0069),
-                // Color(0xff7639FB),
-                AppTheme.allports800,
-                AppTheme.allports500,
-                AppTheme.allports300,
+                Color(0xffFF7A01),
+                Color(0xffFF0069),
+                Color(0xff7639FB),
+                // AppTheme.darkColor,
+                // AppTheme.accentColor,
+                // AppTheme.lightColor,
               ],
               startAngle: pi / 2,
               endAngle: 5 * pi / 2,

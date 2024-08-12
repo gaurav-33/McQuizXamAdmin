@@ -1,5 +1,7 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mcquizadmin/res/theme_data.dart';
 import '../res/app_theme.dart';
 
 class RectButton extends StatelessWidget {
@@ -10,8 +12,7 @@ class RectButton extends StatelessWidget {
       this.ontap,
       this.height,
       this.width,
-      this.iconSize
-      });
+      this.iconSize});
 
   final String name;
   final IconData? icon;
@@ -22,14 +23,15 @@ class RectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: ontap ?? () {},
       child: Container(
         height: height ?? Get.height * 0.15,
         width: width ?? Get.width,
-        decoration: const BoxDecoration(
-            color: AppTheme.allports800,
-            borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+            color: theme.focusColor,
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25),
                 topRight: Radius.circular(10),
@@ -42,12 +44,12 @@ class RectButton extends StatelessWidget {
                 ? Icon(
                     icon,
                     size: iconSize ?? Get.width * 0.1,
-                    color: AppTheme.allports100,
+                    color: theme.primaryColor,
                   )
                 : const SizedBox(),
             Text(
               name,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: theme.textTheme.bodyLarge,
               overflow: TextOverflow.ellipsis,
             ),
           ],

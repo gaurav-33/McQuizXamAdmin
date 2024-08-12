@@ -15,7 +15,8 @@ import '../routes/app_routes.dart';
 class UploadQuestionScreen extends StatelessWidget {
   UploadQuestionScreen({super.key});
 
-  final UploadProgressController progressController = Get.find<UploadProgressController>();
+  final UploadProgressController progressController =
+      Get.find<UploadProgressController>();
 
   final String subjectId = Get.arguments["subject_id"];
   final String subject = Get.arguments["subject_name"];
@@ -25,15 +26,16 @@ class UploadQuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "MCQUIZ ADMIN",
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: AppTheme.allports100,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getSubjectRoute());
@@ -48,6 +50,11 @@ class UploadQuestionScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text("Upload Question",
+                    style: TextStyle(
+                        color: theme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20)),
                 RectButton(
                   name: subject,
                   height: Get.height * 0.10,
@@ -64,7 +71,7 @@ class UploadQuestionScreen extends StatelessWidget {
                 ),
                 Text(
                   "Choose .CSV file for this TOPIC",
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(
                   height: 24,
@@ -101,7 +108,7 @@ class UploadQuestionScreen extends StatelessWidget {
                 Text(
                   overflow: TextOverflow.ellipsis,
                   "File Name: ${progressController.fileName.value}",
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: theme.textTheme.bodyLarge,
                 ),
                 const SizedBox(
                   height: 10,
@@ -112,7 +119,8 @@ class UploadQuestionScreen extends StatelessWidget {
                   height: Get.height * 0.1,
                   width: Get.width * 0.7,
                   ontap: () async {
-                    if (progressController.fileName.value != "" && progressController.isUploading.value == false) {
+                    if (progressController.fileName.value != "" &&
+                        progressController.isUploading.value == false) {
                       await _questionServices.uploadQues(
                           filePath: progressController.filePath.value,
                           subjectId: subjectId,
@@ -129,29 +137,28 @@ class UploadQuestionScreen extends StatelessWidget {
                 ),
                 progressController.progress.value > 0
                     ? Text(
-                  "Uploaded This: ${progressController.quesId.value}",
-                  style: Theme.of(context).textTheme.titleMedium,
-                )
+                        "Uploaded This: ${progressController.quesId.value}",
+                        style: theme.textTheme.titleMedium,
+                      )
                     : const SizedBox(),
                 const SizedBox(
                   height: 24,
                 ),
                 progressController.progress.value > 0
                     ? RichText(
-                  text: TextSpan(
-                      text: ((progressController.progress.value * 10000)
-                          .truncateToDouble() /
-                          100)
-                          .toString(),
-                      style: Theme.of(context).textTheme.displaySmall,
-                      children: [
-                        TextSpan(
-                          text: "  %",
-                          style:
-                          Theme.of(context).textTheme.titleMedium,
-                        )
-                      ]),
-                )
+                        text: TextSpan(
+                            text: ((progressController.progress.value * 10000)
+                                        .truncateToDouble() /
+                                    100)
+                                .toString(),
+                            style: theme.textTheme.titleMedium,
+                            children: [
+                              TextSpan(
+                                text: "  %",
+                                style: theme.textTheme.titleSmall,
+                              )
+                            ]),
+                      )
                     : const SizedBox(),
                 const SizedBox(
                   height: 10,
@@ -159,14 +166,13 @@ class UploadQuestionScreen extends StatelessWidget {
                 CustomPaint(
                   size: Size(Get.width * 0.3, Get.width * 0.3),
                   painter:
-                  LiquidPainter(progressController.progress.value, 1.0),
+                      LiquidPainter(progressController.progress.value, 1.0),
                 ),
               ],
             ),
           ),
         );
-      }
-      ),
+      }),
     );
   }
 }

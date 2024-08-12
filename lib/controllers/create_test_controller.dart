@@ -37,7 +37,6 @@ class CreateTestController extends GetxController {
   var searchQuery = ''.obs;
   RxList<AllQuestionModel> filteredQuestionList = <AllQuestionModel>[].obs;
 
-
   final UploadQuestionServices _questionServices = UploadQuestionServices();
   late final FirestoreRefService _firestoreRefService;
 
@@ -47,7 +46,8 @@ class CreateTestController extends GetxController {
     super.onInit();
     _firestoreRefService = FirestoreRefService();
     fetchTestConfig();
-    debounce(searchQuery, (_) => filterQuestions(), time: Duration(milliseconds: 300));
+    debounce(searchQuery, (_) => filterQuestions(),
+        time: Duration(milliseconds: 300));
   }
 
   // check all the fields
@@ -101,26 +101,37 @@ class CreateTestController extends GetxController {
       filteredQuestionList.assignAll(questionList);
     }
   }
+
   void filterQuestions() {
     if (searchQuery.isEmpty) {
       filteredQuestionList.assignAll(questionList);
     } else {
       filteredQuestionList.assignAll(
-        questionList.where((q) =>
-            q.questionText.toLowerCase().contains(searchQuery.value.toLowerCase())
-        ).toList(),
+        questionList
+            .where((q) => q.questionText
+                .toLowerCase()
+                .contains(searchQuery.value.toLowerCase()))
+            .toList(),
       );
     }
   }
+
   void toggleQuestionSelection(AllQuestionModel question) {
-    if (selectedQuestionList.contains(question)) {
-      selectedQuestionList.remove(question);
-      selectedQuestionCount.value++;
-    } else {
+    final isSelected = selectedQuestionList.any((q) => q.id == question.id);
+
+    if (isSelected) {
+      selectedQuestionList.removeWhere((q) => q.id == question.id);
+    } else if (selectedQuestionList.length < selectedQuestionCount.value) {
       selectedQuestionList.add(question);
-      selectedQuestionCount.value--;
+    } else {
+      AppSnackBar.error(
+        "Limit Reached ,You can only select ${selectedQuestionCount.value} questions.",
+      );
     }
-    print(selectedQuestionCount.value);
+  }
+
+  bool isQuestionSelected(AllQuestionModel question) {
+    return selectedQuestionList.any((q) => q.id == question.id);
   }
 
   Future<void> fetchTestConfig() async {

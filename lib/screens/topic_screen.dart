@@ -9,6 +9,7 @@ import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
 import '../services/upload_category_service.dart';
 import '../services/upload_subject_service.dart';
+import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../widgets/query_stream_builder.dart';
 
@@ -26,15 +27,16 @@ class TopicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "MCQUIZ ADMIN",
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: AppTheme.allports100,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getSubjectRoute());
@@ -44,12 +46,16 @@ class TopicScreen extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(
-            height: Get.height * 0.06,
-            child: Text(
-              "Topics",
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text("Topics",
+              style: TextStyle(
+                  color: theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          const SizedBox(
+            height: 10,
           ),
           Expanded(child: _buildUI()),
         ],
@@ -60,7 +66,6 @@ class TopicScreen extends StatelessWidget {
         },
         child: const Icon(
           Icons.add,
-          color: AppTheme.allports800,
         ),
       ),
     );
@@ -101,7 +106,6 @@ class TopicScreen extends StatelessWidget {
           },
           loadingWidget: const Center(
               child: CircularProgressIndicator(
-            color: AppTheme.allports800,
             strokeWidth: 2,
           )),
           emptyWidget: const Center(child: Text('Add Topic')),
@@ -112,113 +116,46 @@ class TopicScreen extends StatelessWidget {
   }
 
   void _displayDialog(BuildContext context) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Add Topic", style: Theme.of(context).textTheme.titleMedium),
-              TextField(
-                controller: _idcontroller,
-                decoration: const InputDecoration(hintText: "Id (topic_1)"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _namecontroller,
-                decoration: const InputDecoration(hintText: "Name"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _subjectdcontroller,
-                decoration: const InputDecoration(hintText: "cat_1"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _statuscontroller,
-                decoration: const InputDecoration(hintText: "active/inactive"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _descriptioncontroller,
-                decoration: const InputDecoration(hintText: "Description"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _imageUrlcontroller,
-                decoration: const InputDecoration(hintText: "ImageUrl"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      _imageUrlcontroller.clear();
-                      _statuscontroller.clear();
-                      _subjectdcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                      Get.back();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Add"),
-                    onPressed: () {
-                      _upload.uploadTopic(TopicModel(
-                          id: _idcontroller.text.toString(),
-                          name: _namecontroller.text.toString(),
-                          subjectId: _subjectdcontroller.text.toString(),
-                          status: _statuscontroller.text.toString(),
-                          description: _descriptioncontroller.text.toString(),
-                          imageUrl: _imageUrlcontroller.text.toString(),
-                          createdAt: Timestamp.now(),
-                          updatedAt: Timestamp.now()));
-
-                      Get.back();
-                      AppSnackBar.success("Added Topic");
-                      _imageUrlcontroller.clear();
-                      _statuscontroller.clear();
-                      _subjectdcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+      backgroundColor: theme.cardColor,
+      CustomDialogForm(
+        title: "Add Topic",
+        idController: _idcontroller,
+        nameController: _namecontroller,
+        dynamicFieldController:
+            _subjectdcontroller, // Example of renamed controller
+        statusController: _statuscontroller,
+        descriptionController: _descriptioncontroller,
+        imageUrlController: _imageUrlcontroller,
+        dynamicHint: "Subject (subject_01)", // Example of dynamic hint
+        onSave: () {
+          // Create a new TopicModel with the data from the controllers
+          TopicModel newTopic = TopicModel(
+            id: _idcontroller.text.toString(),
+            name: _namecontroller.text.toString(),
+            subjectId: _subjectdcontroller.text.toString(),
+            status: _statuscontroller.text.toString(),
+            description: _descriptioncontroller.text.toString(),
+            imageUrl: _imageUrlcontroller.text.toString(),
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
+          );
+          _upload.uploadTopic(newTopic); // Upload the new topic
+          Get.back(); // Close the bottom sheet
+          AppSnackBar.success("Added Topic"); // Show success message
+          _clearControllers(); // Clear all the controllers
+        },
+        onCancel: () {
+          Get.back(); // Close the bottom sheet
+          _clearControllers(); // Clear all the controllers
+        },
+      ),
+    );
   }
 
   void _displayUpdateDialog(BuildContext context, TopicModel topic) {
+    // Populate the controllers with the existing topic data
     _imageUrlcontroller.text = topic.imageUrl;
     _descriptioncontroller.text = topic.description;
     _namecontroller.text = topic.name;
@@ -227,150 +164,66 @@ class TopicScreen extends StatelessWidget {
     _subjectdcontroller.text = topic.subjectId;
 
     Get.bottomSheet(
-        isDismissible: false,
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Update Topic",
-                  style: Theme.of(context).textTheme.titleMedium),
-              TextField(
-                controller: _idcontroller,
-                decoration: const InputDecoration(hintText: "Id (topic_1)"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _namecontroller,
-                decoration: const InputDecoration(hintText: "Name"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _subjectdcontroller,
-                decoration: InputDecoration(hintText: topic.subjectId),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _statuscontroller,
-                decoration: const InputDecoration(hintText: "active/inactive"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _descriptioncontroller,
-                decoration: const InputDecoration(hintText: "Description"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: _imageUrlcontroller,
-                decoration: const InputDecoration(hintText: "ImageUrl"),
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      Get.back();
-                      _imageUrlcontroller.clear();
-                      _statuscontroller.clear();
-                      _subjectdcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Update"),
-                    onPressed: () {
-                      TopicModel updatedTopic = topic.copyWith(
-                          id: _idcontroller.text.toString(),
-                          subjectId: _subjectdcontroller.text.toString(),
-                          status: _statuscontroller.text.toString(),
-                          name: _namecontroller.text.toString(),
-                          description: _descriptioncontroller.text.toString(),
-                          imageUrl: _imageUrlcontroller.text.toString(),
-                          updatedAt: Timestamp.now());
-                      _upload.uploadTopic(updatedTopic);
+      isDismissible: false,
+      backgroundColor: Theme.of(context).cardColor,
+      CustomDialogForm(
+        title: "Update Topic",
+        idController: _idcontroller,
+        nameController: _namecontroller,
+        dynamicFieldController:
+            _subjectdcontroller, // Example of renamed controller
+        statusController: _statuscontroller,
+        descriptionController: _descriptioncontroller,
+        imageUrlController: _imageUrlcontroller,
+        dynamicHint: "Subject (subject_01)", // Example of dynamic hint
+        onSave: () {
+          TopicModel updatedTopic = topic.copyWith(
+            id: _idcontroller.text.toString(),
+            subjectId: _subjectdcontroller.text.toString(),
+            status: _statuscontroller.text.toString(),
+            name: _namecontroller.text.toString(),
+            description: _descriptioncontroller.text.toString(),
+            imageUrl: _imageUrlcontroller.text.toString(),
+            updatedAt: Timestamp.now(),
+          );
+          _upload.updateTopic(
+              updatedTopic.subjectId, updatedTopic.id, updatedTopic);
+          Get.back();
+          AppSnackBar.success("Updated Topic");
+          _clearControllers();
+        },
+        onCancel: () {
+          Get.back();
+          _clearControllers();
+        },
+      ),
+    );
+  }
 
-                      Get.back();
-                      AppSnackBar.success("Updated Topic");
-                      _imageUrlcontroller.clear();
-                      _descriptioncontroller.clear();
-                      _idcontroller.clear();
-                      _namecontroller.clear();
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+  void _clearControllers() {
+    _imageUrlcontroller.clear();
+    _statuscontroller.clear();
+    _subjectdcontroller.clear();
+    _descriptioncontroller.clear();
+    _idcontroller.clear();
+    _namecontroller.clear();
   }
 
   void _deleteDialog(BuildContext context, String topicId) {
+    final theme = Theme.of(context);
     Get.bottomSheet(
-        backgroundColor: AppTheme.allports100,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Want to Delete it?",
-                  style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(
-                height: 50,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MaterialButton(
-                    color: AppTheme.allports200,
-                    textColor: AppTheme.allports800,
-                    child: const Text("Cancel"),
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
-                  MaterialButton(
-                    color: AppTheme.allports700,
-                    textColor: AppTheme.allports100,
-                    child: const Text("Delete"),
-                    onPressed: () {
-                      _upload.deleteTopic(subjectId, topicId);
-                      Get.back();
-                      AppSnackBar.error("Deleted");
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        ));
+      backgroundColor: theme.cardColor,
+      CustomDialogForm(
+        title: "Want to Delete it?",
+        onCancel: () {
+          Get.back();
+        },
+        onSave: () {
+          _upload.deleteTopic(subjectId, topicId);
+          Get.back();
+          AppSnackBar.error("Deleted");
+        },
+      ),
+    );
   }
 }

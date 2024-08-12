@@ -19,12 +19,13 @@ class DropDownForList<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Find the current value based on selectedItemId, or use null if not found
     T? currentValue;
     if (selectedItemId != null) {
       try {
         currentValue = items.firstWhere(
-              (item) => item.toString() == selectedItemId,
+          (item) => item.toString() == selectedItemId,
         );
       } catch (e) {
         currentValue = null; // No matching item found
@@ -34,18 +35,18 @@ class DropDownForList<T> extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
       decoration: BoxDecoration(
-        color: AppTheme.allports50,
-        border: Border.all(color: AppTheme.allports900, width: 2),
+        color: theme.cardColor,
+        border: Border.all(color: theme.primaryColor, width: 2),
         borderRadius: BorderRadius.circular(15),
       ),
       child: DropdownButton<T>(
         borderRadius: BorderRadius.circular(40),
-        dropdownColor: AppTheme.allports100,
+        dropdownColor: theme.secondaryHeaderColor,
         isExpanded: true,
         underline: const SizedBox(),
         hint: Text(
           hint,
-          style: const TextStyle(fontSize: 20),
+          style: TextStyle(color: theme.hintColor),
         ),
         value: value ?? currentValue, // Use provided value or the found value
         items: items.map<DropdownMenuItem<T>>((T value) {
@@ -53,6 +54,7 @@ class DropDownForList<T> extends StatelessWidget {
             value: value,
             child: Text(
               value.toString(),
+              style: TextStyle(color: theme.primaryColor),
               overflow: TextOverflow.visible,
               softWrap: true,
             ),

@@ -4,12 +4,11 @@ import 'package:mcquizadmin/Utils/tost_snackbar.dart';
 import 'package:mcquizadmin/models/teacher_model.dart';
 import 'package:mcquizadmin/services/firestore_ref_service.dart';
 
-class TeacherService{
+class TeacherService {
   late final FirestoreRefService _firestoreRefService;
-  TeacherService(){
+  TeacherService() {
     _firestoreRefService = FirestoreRefService();
   }
-
 
   Future<void> uploadTeacher(TeacherModel teacher) async {
     try {
@@ -29,11 +28,11 @@ class TeacherService{
     }
   }
 
-    Stream<QuerySnapshot> fetchTeacher() {
+  Stream<QuerySnapshot> fetchTeacher() {
     return _firestoreRefService.teacherscollectionref.snapshots();
   }
 
-    void updateTeacher(String teacherId, TeacherModel teacher) async {
+  void updateTeacher(String teacherId, TeacherModel teacher) async {
     await _firestoreRefService.teacherscollectionref
         .doc(teacherId)
         .update(teacher.toJson());
@@ -42,5 +41,4 @@ class TeacherService{
   void deleteCategory(String teacherId) async {
     await _firestoreRefService.teacherscollectionref.doc(teacherId).delete();
   }
-
 }
