@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import '../models/category_model.dart';
 import '../services/firestore_ref_service.dart';
 
-class UploadCategoryServices {
+class ManageCategoryServices {
   late final FirestoreRefService _firestoreRefService;
-  UploadCategoryServices() {
+
+  ManageCategoryServices() {
     _firestoreRefService = FirestoreRefService();
   }
 

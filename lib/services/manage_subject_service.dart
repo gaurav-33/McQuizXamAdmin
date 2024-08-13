@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 import '../models/subject_model.dart';
 import 'firestore_ref_service.dart';
 
-class UploadSubjectServices {
+class ManageSubjectServices {
   late final FirestoreRefService _firestoreRefService;
-  UploadSubjectServices() {
+
+  ManageSubjectServices() {
     _firestoreRefService = FirestoreRefService();
   }
 

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '../Utils/tost_snackbar.dart';
 import '../models/subject_model.dart';
 import '../routes/app_routes.dart';
-import '../services/upload_subject_service.dart';
+import '../services/manage_subject_service.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../widgets/query_stream_builder.dart';
@@ -15,7 +15,7 @@ class TopicScreen extends StatelessWidget {
   TopicScreen({super.key});
   final subjectId = Get.arguments["subject_id"];
   final subjectName = Get.arguments["subject_name"];
-  final UploadSubjectServices _upload = UploadSubjectServices();
+  final ManageSubjectServices _upload = ManageSubjectServices();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _subjectdcontroller = TextEditingController();
   final TextEditingController _statuscontroller = TextEditingController();

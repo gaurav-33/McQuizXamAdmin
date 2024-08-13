@@ -9,9 +9,9 @@ import '../models/subject_model.dart';
 import '../models/teacher_model.dart';
 import '../models/test_config_model.dart';
 import '../routes/app_routes.dart';
+import '../services/manage_category_service.dart';
+import '../services/manage_subject_service.dart';
 import '../services/teacher_service.dart';
-import '../services/upload_category_service.dart';
-import '../services/upload_subject_service.dart';
 import '../services/upload_test_paper.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/drop_down_for_list.dart';
@@ -23,8 +23,8 @@ class CreateTestScreen extends StatelessWidget {
   CreateTestScreen({super.key});
 
   CreateTestController testController = Get.put(CreateTestController());
-  final UploadCategoryServices _categoryServices = UploadCategoryServices();
-  final UploadSubjectServices _subjectServices = UploadSubjectServices();
+  final ManageCategoryServices _categoryServices = ManageCategoryServices();
+  final ManageSubjectServices _subjectServices = ManageSubjectServices();
   final TeacherService _teacherService = TeacherService();
   final TextEditingController _searchedText = TextEditingController();
   final UploadProgressController _uploadProgressController =

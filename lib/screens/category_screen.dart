@@ -5,9 +5,8 @@ import 'package:intl/intl.dart';
 
 import '../Utils/tost_snackbar.dart';
 import '../models/category_model.dart';
-import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
-import '../services/upload_category_service.dart';
+import '../services/manage_category_service.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../widgets/query_stream_builder.dart';
@@ -15,7 +14,7 @@ import '../widgets/query_stream_builder.dart';
 class CategoryScreen extends StatelessWidget {
   CategoryScreen({super.key});
 
-  final UploadCategoryServices _upload = UploadCategoryServices();
+  final ManageCategoryServices _upload = ManageCategoryServices();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _idcontroller = TextEditingController();
   final TextEditingController _descriptioncontroller = TextEditingController();
@@ -87,7 +86,7 @@ class CategoryScreen extends StatelessWidget {
                       .format(cat.updatedAt.toDate()),
                   deleteFunc: () => _deleteDialog(context, catId),
                   onCardTap: () => Get.toNamed(AppRoutes.getSubCategoryRoute(),
-                      arguments: {"category_id": catId}),
+                      arguments: {"category_id": catId, "category":cat.name}),
                   editFunc: () => _displayUpdateDialog(context, cat, catId),
                 );
               },
@@ -95,7 +94,6 @@ class CategoryScreen extends StatelessWidget {
           },
           loadingWidget: const Center(
               child: CircularProgressIndicator(
-            color: AppTheme.darkColor,
             strokeWidth: 2,
           )),
           emptyWidget: const Center(child: Text('Add Category')),

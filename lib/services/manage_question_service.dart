@@ -10,9 +10,10 @@ import '../models/all_ques_model.dart';
 import '../services/counter_service.dart';
 import 'firestore_ref_service.dart';
 
-class UploadQuestionServices {
+class ManageQuestionServices {
   late final FirestoreRefService _firestoreRefService;
-  UploadQuestionServices() {
+
+  ManageQuestionServices() {
     _firestoreRefService = FirestoreRefService();
   }
   final progressController = Get.find<UploadProgressController>();

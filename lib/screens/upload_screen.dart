@@ -4,20 +4,19 @@ import 'package:intl/intl.dart';
 
 import '../models/all_ques_model.dart';
 import '../models/category_model.dart';
-import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
+import '../services/manage_category_service.dart';
+import '../services/manage_question_service.dart';
+import '../services/manage_subject_service.dart';
 import '../services/teacher_service.dart';
-import '../services/upload_category_service.dart';
-import '../services/upload_question_service.dart';
-import '../services/upload_subject_service.dart';
 
 class UploadScreen extends StatelessWidget {
   UploadScreen({super.key});
 
-  UploadCategoryServices _uploadCategoryServices = UploadCategoryServices();
-  UploadSubjectServices _uploadSubjectServices = UploadSubjectServices();
+  ManageCategoryServices _uploadCategoryServices = ManageCategoryServices();
+  ManageSubjectServices _uploadSubjectServices = ManageSubjectServices();
   TeacherService _teacherService = TeacherService();
-  UploadQuestionServices _questionServices = UploadQuestionServices();
+  ManageQuestionServices _questionServices = ManageQuestionServices();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,6 @@ class UploadScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: AppTheme.lightColor,
           ),
           onPressed: () {
             Get.offAllNamed(AppRoutes.getHomeRoute());

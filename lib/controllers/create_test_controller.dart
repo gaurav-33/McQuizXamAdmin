@@ -7,7 +7,7 @@ import '../Utils/tost_snackbar.dart';
 import '../models/all_ques_model.dart';
 import '../models/test_config_model.dart';
 import '../services/firestore_ref_service.dart';
-import '../services/upload_question_service.dart';
+import '../services/manage_question_service.dart';
 
 class CreateTestController extends GetxController {
   RxList categoryList = [].obs;
@@ -42,7 +42,7 @@ class CreateTestController extends GetxController {
   RxBool isUploading = false.obs;
   RxDouble progress = 0.0.obs;
 
-  final UploadQuestionServices _questionServices = UploadQuestionServices();
+  final ManageQuestionServices _questionServices = ManageQuestionServices();
   late final FirestoreRefService _firestoreRefService;
 
   @override

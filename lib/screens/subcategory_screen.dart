@@ -5,9 +5,8 @@ import 'package:intl/intl.dart';
 
 import '../Utils/tost_snackbar.dart';
 import '../models/category_model.dart';
-import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
-import '../services/upload_category_service.dart';
+import '../services/manage_category_service.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../widgets/query_stream_builder.dart';
@@ -15,7 +14,8 @@ import '../widgets/query_stream_builder.dart';
 class SubCategoryScreen extends StatelessWidget {
   SubCategoryScreen({super.key});
   final categoryId = Get.arguments["category_id"];
-  final UploadCategoryServices _upload = UploadCategoryServices();
+  final category = Get.arguments["category"];
+  final ManageCategoryServices _upload = ManageCategoryServices();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _categoryIdcontroller = TextEditingController();
   final TextEditingController _statuscontroller = TextEditingController();
@@ -91,13 +91,20 @@ class SubCategoryScreen extends StatelessWidget {
                       .format(subcat.updatedAt.toDate()),
                   deleteFunc: () => _deleteDialog(context, subcatId),
                   editFunc: () => _displayUpdateDialog(context, subcat),
+                  onCardTap: (){
+                    Get.toNamed(AppRoutes.getTestRoute(), arguments: {
+                      "category_id" : categoryId,
+                      "category" : category,
+                      "subCat_id": subcatId,
+                      "subCat" : subcat.name
+                    });
+                  },
                 );
               },
             );
           },
           loadingWidget: const Center(
               child: CircularProgressIndicator(
-            color: AppTheme.darkColor,
             strokeWidth: 2,
           )),
           emptyWidget: const Center(child: Text('Add SubCategory')),

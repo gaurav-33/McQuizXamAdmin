@@ -32,9 +32,8 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme, // Use the dark theme
       themeMode:
           ThemeMode.system, // Uncomment this line to use system theme mode
-      initialRoute: AppRoutes.getHomeRoute(),
+      initialRoute: AppRoutes.getSplashRoute(),
       getPages: AppRoutes.routes,
-      // theme: AppTheme.themeData,
     );
   }
 }

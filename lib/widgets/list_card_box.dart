@@ -7,15 +7,15 @@ class ListCardBox extends StatelessWidget {
       required this.title,
       required this.subtitle,
       required this.detail,
-      required this.deleteFunc,
-      required this.editFunc,
+      this.deleteFunc,
+      this.editFunc,
       this.onCardTap});
 
   final String title;
   final String subtitle;
   final String detail;
-  final VoidCallback deleteFunc;
-  final VoidCallback editFunc;
+  final VoidCallback? deleteFunc;
+  final VoidCallback? editFunc;
   final VoidCallback? onCardTap;
 
   @override
@@ -71,18 +71,22 @@ class ListCardBox extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                            onTap: deleteFunc,
+                        deleteFunc != null
+                            ? InkWell(
+                                onTap: deleteFunc,
                             child: Icon(
                               Icons.delete_outline_rounded,
                               color: theme.buttonTheme.colorScheme?.error,
-                            )),
-                        InkWell(
-                            onTap: editFunc,
+                                ))
+                            : const SizedBox(),
+                        editFunc != null
+                            ? InkWell(
+                                onTap: editFunc,
                             child: Icon(
                               Icons.edit_rounded,
                               color: theme.primaryColor,
-                            )),
+                                ))
+                            : const SizedBox(),
                         onCardTap != null
                             ? InkWell(
                                 onTap: onCardTap ?? () {},

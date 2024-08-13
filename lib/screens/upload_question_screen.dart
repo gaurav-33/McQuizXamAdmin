@@ -7,7 +7,7 @@ import '../Utils/file_picker_util.dart';
 import '../Utils/tost_snackbar.dart';
 import '../controllers/upload_progress_controller.dart';
 import '../routes/app_routes.dart';
-import '../services/upload_question_service.dart';
+import '../services/manage_question_service.dart';
 import '../widgets/liquid_progress_indicator.dart';
 import '../widgets/rect_button.dart';
 
@@ -21,7 +21,7 @@ class UploadQuestionScreen extends StatelessWidget {
   final String subject = Get.arguments["subject_name"];
   final String topicId = Get.arguments["topic_id"];
   final String topic = Get.arguments["topic_name"];
-  final UploadQuestionServices _questionServices = UploadQuestionServices();
+  final ManageQuestionServices _questionServices = ManageQuestionServices();
 
   @override
   Widget build(BuildContext context) {
