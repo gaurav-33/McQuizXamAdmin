@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
-import 'package:mcquizadmin/screens/create_test_screen.dart';
-import 'package:mcquizadmin/screens/subject_screen.dart';
-import 'package:mcquizadmin/screens/topic_screen.dart';
-import 'package:mcquizadmin/screens/upload_question_screen.dart';
-import 'package:mcquizadmin/screens/upload_screen.dart';
+
 import '../screens/category_screen.dart';
+import '../screens/create_test_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/subcategory_screen.dart';
+import '../screens/subject_screen.dart';
+import '../screens/topic_screen.dart';
+import '../screens/upload_question_screen.dart';
+import '../screens/upload_screen.dart';
 
 class AppRoutes {
   static String home = "/";

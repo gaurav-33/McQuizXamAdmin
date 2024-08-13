@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../res/app_theme.dart';
 
 class ListCardBox extends StatelessWidget {
   const ListCardBox(
@@ -76,7 +75,7 @@ class ListCardBox extends StatelessWidget {
                             onTap: deleteFunc,
                             child: Icon(
                               Icons.delete_outline_rounded,
-                              color: theme.primaryColor,
+                              color: theme.buttonTheme.colorScheme?.error,
                             )),
                         InkWell(
                             onTap: editFunc,

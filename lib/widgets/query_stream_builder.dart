@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class QueryStreamBuilder extends StatelessWidget {
   final Stream<QuerySnapshot> stream;
@@ -28,7 +28,7 @@ class QueryStreamBuilder extends StatelessWidget {
         } else if (snapshot.hasError) {
           return errorWidget ?? const Center(child: Text('An error occurred'));
         } else if (snapshot.hasData) {
-          final documents = snapshot.data?.docs;
+          final documents = snapshot.data?.docs.reversed.toList();
           if (documents == null || documents.isEmpty) {
             return emptyWidget ??
                 const Center(child: Text('No data available'));

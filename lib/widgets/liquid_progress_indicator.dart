@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:mcquizadmin/res/app_theme.dart';
 
 /// A custom painter that creates a liquid-like animation using a sine wave.
 class LiquidPainter extends CustomPainter {

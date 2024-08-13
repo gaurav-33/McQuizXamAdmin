@@ -1,23 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mcquizadmin/Utils/tost_snackbar.dart';
-import 'package:mcquizadmin/widgets/query_stream_builder.dart';
-import 'package:mcquizadmin/widgets/rect_button.dart';
-import '../models/all_ques_model.dart';
-import '../models/teacher_model.dart';
-import '../models/test_config_model.dart';
-import '../services/teacher_service.dart';
-import '../services/upload_question_service.dart';
-import '../widgets/drop_down_for_list.dart';
+
+import '../Utils/tost_snackbar.dart';
 import '../controllers/create_test_controller.dart';
+import '../controllers/upload_progress_controller.dart';
 import '../models/category_model.dart';
 import '../models/subject_model.dart';
+import '../models/teacher_model.dart';
+import '../models/test_config_model.dart';
+import '../routes/app_routes.dart';
+import '../services/teacher_service.dart';
 import '../services/upload_category_service.dart';
 import '../services/upload_subject_service.dart';
+import '../services/upload_test_paper.dart';
+import '../widgets/dialog_widget.dart';
+import '../widgets/drop_down_for_list.dart';
 import '../widgets/drop_down_widget.dart';
-import '../res/app_theme.dart';
-import '../routes/app_routes.dart';
+import '../widgets/liquid_progress_indicator.dart';
+import '../widgets/rect_button.dart';
 
 class CreateTestScreen extends StatelessWidget {
   CreateTestScreen({super.key});
@@ -27,6 +27,13 @@ class CreateTestScreen extends StatelessWidget {
   final UploadSubjectServices _subjectServices = UploadSubjectServices();
   final TeacherService _teacherService = TeacherService();
   final TextEditingController _searchedText = TextEditingController();
+  final UploadProgressController _uploadProgressController =
+      Get.find<UploadProgressController>();
+
+  final TextEditingController _titlecontroller = TextEditingController();
+  final TextEditingController _idcontroller = TextEditingController();
+  final TextEditingController _descriptioncontroller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +43,7 @@ class CreateTestScreen extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
           ),
           onPressed: () {
@@ -49,7 +56,7 @@ class CreateTestScreen extends StatelessWidget {
           final testConfig = testController.testConfig.value;
 
           return testController.testConfig.value == null
-              ? Center(child: const CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -71,77 +78,65 @@ class CreateTestScreen extends StatelessWidget {
                       // const SizedBox(
                       //   height: 20,
                       // ),
-                      _title("Category"),
+                      _title("Category", context),
                       _buildCategoryDropdown(),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("SubCategory"),
+                      _title("SubCategory", context),
                       testController.selectedCategoryId.value != ""
                           ? _buildSubCategoryDropdown()
                           : const SizedBox(),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // _title("Subject"),
-                      // _buildSubjectDropdown(),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      // _title("Topic"),
-                      // testController.selectedSubjectId.value != ""
-                      //     ? _buildTopicDropdown()
-                      //     : const SizedBox(),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Owner"),
+                      _title("Owner", context),
                       _buildTeacherDropDown(),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Type"),
+                      _title("Type", context),
                       _buildTestTypeDropdown(testConfig!),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("No. Of Questions"),
+                      _title("No. Of Questions", context),
                       _buildQuesCountDropDown(testConfig),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Each Question Marks"),
+                      _title("Each Question Marks", context),
                       _buildPositiveMarkDropDown(testConfig),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Negative Mark"),
+                      _title("Negative Mark", context),
                       _buildNegativeMarkDropDown(testConfig),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Duration"),
+                      _title("Duration", context),
                       _buildDurationDropdown(testConfig),
                       const SizedBox(
                         height: 20,
                       ),
-                      _title("Status"),
+                      _title("Status", context),
                       _buildStatusDropdown(testConfig),
                       const SizedBox(
                         height: 20,
                       ),
-                      // _title("Question"),
-                      // (testController.selectedTopicId.value != "" &&
-                      //         testController.selectedSubjectId.value != "")
-                      //     ? RectButton(
-                      //         name: "Questions",
-                      //         height: Get.height * 0.06,
-                      //         width: Get.width * 0.5,
-                      //         ontap: () {
-                      //           _showQuestionDialog(context);
-                      //         },
-                      //       )
-                      //     : const SizedBox(),
+                      _title("Subject", context),
+                      _buildSubjectDropdown(),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _title("Topic", context),
+                      testController.selectedSubjectId.value != ""
+                          ? _buildTopicDropdown()
+                          : const SizedBox(),
+                      const SizedBox(
+                        height: 20,
+                      ),
 
                       RectButton(
                         name: "Questions",
@@ -154,7 +149,7 @@ class CreateTestScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      _buildUploadButton(),
+                      _buildUploadButton(context),
                       const SizedBox(
                         height: 20,
                       ),
@@ -165,10 +160,10 @@ class CreateTestScreen extends StatelessWidget {
     );
   }
 
-  Widget _title(String title) {
+  Widget _title(String title, BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(color: AppTheme.darkColor, fontSize: 15),
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
     );
   }
 
@@ -340,26 +335,11 @@ class CreateTestScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildQuestionDropdown() {
-  //   return AppDropDownBtn<AllQuestionModel>(
-  //     stream: _questionServices.fetchAllQuestion(
-  //         testController.selectedSubjectId.value,
-  //         testController.selectedTopicId.value),
-  //     itemBuilder: (AllQuestionModel question) => question.questionText,
-  //     onChanged: (AllQuestionModel question, String id) {
-  //       testController.selectedQuestion.value = question.questionText;
-  //       testController.selectedQuestionId.value = id;
-  //     },
-  //     hintText: "Select Question",
-  //     selectedItemId: testController.selectedQuestionId.value,
-  //   );
-  // }
-
   void _showQuestionDialog(BuildContext context) async {
-    // testController.getAllQuestions();
+    testController.getAllQuestions();
     final theme = Theme.of(context);
     Get.bottomSheet(
-        isScrollControlled: true,
+        // isScrollControlled: true,
         ignoreSafeArea: true,
         backgroundColor: theme.cardColor,
         Padding(
@@ -368,87 +348,65 @@ class CreateTestScreen extends StatelessWidget {
             () {
               return Column(
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: Icon(Icons.transit_enterexit_rounded)),
-                  _title("Subject"),
-                  _buildSubjectDropdown(),
+                  Text(
+                    "Questions Left: ${testController.selectedQuestionLeft.value}",
+                    // style: const TextStyle(color: AppTheme.darkColor),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Questions Left: ${testController.selectedQuestionCount.value}",
-                    // style: const TextStyle(color: AppTheme.darkColor),
+                  TextFormField(
+                    controller: _searchedText,
+                    onChanged: (value) {
+                      testController.searchQuery.value = value;
+                    },
+                    // style:  TextStyle(color: AppTheme.darkColor),
+                    decoration: const InputDecoration(
+                      hintText: "Search Ques...",
+                    ),
                   ),
-                  _title("Topic"),
-                  testController.selectedSubjectId.value == ""
-                      ? const SizedBox()
-                      : TextFormField(
-                          controller: _searchedText,
-                          onChanged: (value) {
-                            testController.searchQuery.value = value;
-                          },
-                          // style:  TextStyle(color: AppTheme.darkColor),
-                          decoration: InputDecoration(
-                            hintText: "Search Ques...",
-                            // fillColor: AppTheme.lightColor,
-                            // filled: true,
-                            // focusedBorder: OutlineInputBorder(
-                            //   borderSide: const BorderSide(
-                            //       // color: AppTheme.darkColor,
-                            //       width: 2),
-                            //   borderRadius: BorderRadius.circular(20),
-                            // ),
-                            // enabledBorder: OutlineInputBorder(
-                            //   borderSide: const BorderSide(
-                            //       // color: AppTheme.accentColor,
-                            //       width: 2),
-                            //   borderRadius: BorderRadius.circular(20),
-                            // )
-                          ),
-                        ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: Obx(() {
-                      if (testController.filteredQuestionList.isEmpty) {
-                        return const Text(
-                          "No Question Found",
-                          style: TextStyle(color: AppTheme.darkColor),
-                        );
-                      } else {
-                        return ListView.builder(
-                          itemCount: testController.filteredQuestionList.length,
-                          itemBuilder: (context, index) {
-                            final questionModel =
-                                testController.filteredQuestionList[index];
-                            return Card(
-                              color: AppTheme.accentColor,
-                              child: ListTile(
-                                title: Text(
-                                  questionModel.questionText,
-                                  style: const TextStyle(
-                                      color: AppTheme.darkColor),
-                                ),
-                                onTap: () {
-                                  testController
-                                      .toggleQuestionSelection(questionModel);
-                                },
-                                trailing: Obx(() => Icon(
-                                      testController
-                                              .isQuestionSelected(questionModel)
-                                          ? Icons.check_box
-                                          : Icons.check_box_outline_blank,
-                                      color: AppTheme.darkColor,
-                                    )),
+                  Expanded(child: Obx(() {
+                    // if(testController.selectedTopicId.value != ""){
+                    //   testController.getAllQuestions();
+                    // }
+                    if (testController.filteredQuestionList.isEmpty) {
+                      return Text(
+                        "No Question Found",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: testController.filteredQuestionList.length,
+                        itemBuilder: (context, index) {
+                          final questionModel =
+                              testController.filteredQuestionList[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(
+                                questionModel.questionText,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
                               ),
-                            );
-                          },
-                        );
-                      }
-                    }),
-                  ),
+                              onTap: () {
+                                testController
+                                    .toggleQuestionSelection(questionModel);
+                              },
+                              trailing: Obx(() => Icon(
+                                    testController
+                                            .isQuestionSelected(questionModel)
+                                        ? Icons.check_box
+                                        : Icons.check_box_outline_blank,
+                                    color: Theme.of(context)
+                                        .buttonTheme
+                                        .colorScheme
+                                        ?.error,
+                                  )),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  })),
                 ],
               );
             },
@@ -456,7 +414,7 @@ class CreateTestScreen extends StatelessWidget {
         ));
   }
 
-  Widget _buildUploadButton() {
+  Widget _buildUploadButton(BuildContext context) {
     return RectButton(
       name: "Create Test",
       icon: Icons.create_new_folder,
@@ -464,18 +422,70 @@ class CreateTestScreen extends StatelessWidget {
       iconSize: Get.width * 0.05,
       ontap: () {
         testController.checkAllFields();
-        testController.fieldsChecked.value == true ? success() : error();
+        testController.fieldsChecked.value == true
+            ? _buildTestDialog(context)
+            : AppSnackBar.error("Choose All Fields");
       },
     );
   }
 
-  void success() {
-    print("Ready to Upload");
-    AppSnackBar.success("REady to Uplad");
-  }
-
-  void error() {
-    print("Choose All Fields");
-    AppSnackBar.error("Choose All Fields");
+  void _buildTestDialog(BuildContext context) {
+    Get.bottomSheet(
+        isDismissible: false,
+        backgroundColor: Theme.of(context).cardColor, Obx(() {
+      if (testController.progress.value > 0) {
+        return Container(
+          height: 300,
+          padding: const EdgeInsets.symmetric(vertical: 60),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RichText(
+                text: TextSpan(
+                    text: ((testController.progress.value * 10000)
+                                .truncateToDouble() /
+                            100)
+                        .toString(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                    children: [
+                      TextSpan(
+                        text: "  %",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      )
+                    ]),
+              ),
+              const Spacer(),
+              CustomPaint(
+                size: const Size(100, 100),
+                painter: LiquidPainter(testController.progress.value, 1),
+              ),
+            ],
+          ),
+        );
+      }
+      return CustomDialogForm(
+        title: "Add Test Details",
+        idController: _idcontroller,
+        idHint: "test_0001...(generated automatically, don't change it)",
+        nameController: _titlecontroller,
+        descriptionController: _descriptioncontroller,
+        onCancel: () {
+          Get.back();
+          _idcontroller.clear();
+          _titlecontroller.clear();
+          _descriptioncontroller.clear();
+        },
+        onSave: () {
+          if (_titlecontroller.text.isNotEmpty) {
+            if (testController.isUploading.value == false) {
+              UploadTestPaper().uploadTestPaper();
+            }
+          } else {
+            AppSnackBar.error("Enter Name and Description");
+          }
+        },
+      );
+    }));
   }
 }

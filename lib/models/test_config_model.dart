@@ -20,6 +20,7 @@ class TestConfigModel {
     List<double>? marksPerQuestion,
     List<double>? negativeMarks,
     List<int>? durations,
+    List<String>? status,
   }) {
     return TestConfigModel(
       testTypes: testTypes ?? this.testTypes,
@@ -27,7 +28,7 @@ class TestConfigModel {
       marksPerQuestion: marksPerQuestion ?? this.marksPerQuestion,
       negativeMarks: negativeMarks ?? this.negativeMarks,
       durations: durations ?? this.durations,
-      status: testTypes ?? this.status,
+      status: status ?? this.status,
     );
   }
 
@@ -62,6 +63,6 @@ class TestConfigModel {
         "marks_per_question": marksPerQuestion.map((x) => x).toList(),
         "negative_marks": negativeMarks.map((x) => x).toList(),
         "durations": durations.map((x) => x).toList(),
-        "status": testTypes.map((x) => x).toList(),
+        "status": status.map((x) => x).toList(),
       };
 }

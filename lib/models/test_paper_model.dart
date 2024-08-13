@@ -1,72 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OptionModel {
-  final String optionId;
-  final String text;
-  final bool isCorrect;
-
-  OptionModel({
-    required this.optionId,
-    required this.text,
-    required this.isCorrect,
-  });
-
-  factory OptionModel.fromJson(Map<String, dynamic> json) {
-    return OptionModel(
-      optionId: json['option_id'],
-      text: json['text'],
-      isCorrect: json['is_correct'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'option_id': optionId,
-      'text': text,
-      'is_correct': isCorrect,
-    };
-  }
-}
-
-class QuestionModel {
-  final String questionId;
-  final String questionText;
-  final String questionType;
-  final List<OptionModel> options;
-  final int marks;
-
-  QuestionModel({
-    required this.questionId,
-    required this.questionText,
-    required this.questionType,
-    required this.options,
-    required this.marks,
-  });
-
-  factory QuestionModel.fromJson(Map<String, dynamic> json) {
-    var optionsList = json['options'] as List;
-    List<OptionModel> options =
-        optionsList.map((i) => OptionModel.fromJson(i)).toList();
-
-    return QuestionModel(
-      questionId: json['question_id'],
-      questionText: json['question_text'],
-      questionType: json['question_type'],
-      options: options,
-      marks: json['marks'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'question_id': questionId,
-      'question_text': questionText,
-      'question_type': questionType,
-      'options': options.map((option) => option.toJson()).toList(),
-      'marks': marks,
-    };
-  }
-}
+// class OptionModel {
+//   final String optionId;
+//   final String text;
+//   final bool isCorrect;
+//
+//   OptionModel({
+//     required this.optionId,
+//     required this.text,
+//     required this.isCorrect,
+//   });
+//
+//   factory OptionModel.fromJson(Map<String, dynamic> json) {
+//     return OptionModel(
+//       optionId: json['option_id'],
+//       text: json['text'],
+//       isCorrect: json['is_correct'],
+//     );
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'option_id': optionId,
+//       'text': text,
+//       'is_correct': isCorrect,
+//     };
+//   }
+// }
+//
+// class QuestionModel {
+//   final String questionId;
+//   final String questionText;
+//   final String questionType;
+//   final List<OptionModel> options;
+//   final int marks;
+//
+//   QuestionModel({
+//     required this.questionId,
+//     required this.questionText,
+//     required this.questionType,
+//     required this.options,
+//     required this.marks,
+//   });
+//
+//   factory QuestionModel.fromJson(Map<String, dynamic> json) {
+//     var optionsList = json['options'] as List;
+//     List<OptionModel> options =
+//         optionsList.map((i) => OptionModel.fromJson(i)).toList();
+//
+//     return QuestionModel(
+//       questionId: json['question_id'],
+//       questionText: json['question_text'],
+//       questionType: json['question_type'],
+//       options: options,
+//       marks: json['marks'],
+//     );
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'question_id': questionId,
+//       'question_text': questionText,
+//       'question_type': questionType,
+//       'options': options.map((option) => option.toJson()).toList(),
+//       'marks': marks,
+//     };
+//   }
+// }
 
 class MockTestModel {
   final String owner;
@@ -76,8 +76,8 @@ class MockTestModel {
   final String title;
   final String description;
   final int duration;
-  final int totalMarks;
-  final int negativeMarking;
+  final double totalMarks;
+  final double negativeMarking;
   final String status;
   final String examType;
   final int numberOfQuestions;

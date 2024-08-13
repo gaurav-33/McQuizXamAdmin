@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mcquizadmin/Utils/counter_util.dart';
-import 'package:mcquizadmin/models/counter_model.dart';
 
 import '../Utils/tost_snackbar.dart';
+import '../models/counter_model.dart';
 import 'firestore_ref_service.dart';
 
 class CounterService {

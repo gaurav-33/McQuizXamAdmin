@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mcquizadmin/models/teacher_model.dart';
-import 'package:mcquizadmin/models/test_config_model.dart';
+
 import '../models/all_ques_model.dart';
-import '../models/subject_model.dart';
 import '../models/category_model.dart';
 import '../models/counter_model.dart';
+import '../models/subject_model.dart';
+import '../models/teacher_model.dart';
+import '../models/test_config_model.dart';
 import '../models/test_paper_model.dart';
 
 const String CATEGORY_COLLECT_REF = "categories";
 const String SUBCATEGORY_COLLECT_REF = "subcategories";
-const String QUESTION_PAPER_COLLECT_REF = "question_papers";
-const String QUESTION_COLLECT_REF = "questions";
+const String MOCK_TEST_COLLECT_REF = "test_papers";
+const String MOCK_TEST_QUES_COLLECT_REF = "test_questions";
 const String SUBJECT_COLLECT_REF = "subjects";
 const String TOPIC_COLLECT_REF = "topics";
 const String COUNTER_COLLECT_REF = "counters";
@@ -96,31 +97,31 @@ class FirestoreRefService {
             toFirestore: (data, _) => data.toJson());
   }
 
-  CollectionReference<MockTestModel> getQuestionPaperRef(
-      String categoryId, String subcatId) {
+  CollectionReference<MockTestModel> getMockTestRef(
+      String categoryId, String subCatId) {
     return categorycollectionref
         .doc(categoryId)
         .collection(SUBCATEGORY_COLLECT_REF)
-        .doc(subcatId)
-        .collection(QUESTION_PAPER_COLLECT_REF)
+        .doc(subCatId)
+        .collection(MOCK_TEST_COLLECT_REF)
         .withConverter(
             fromFirestore: (snapshot, _) =>
                 MockTestModel.fromJson(snapshot.data()!),
             toFirestore: (paperdata, _) => paperdata.toJson());
   }
 
-  CollectionReference<QuestionModel> getQuestionRef(
-      String paperId, String categoryId, String subcatId) {
+  CollectionReference<AllQuestionModel> getTestQuestionRef(
+      String testId, String categoryId, String subCatId) {
     return categorycollectionref
         .doc(categoryId)
         .collection(SUBCATEGORY_COLLECT_REF)
-        .doc(subcatId)
-        .collection(QUESTION_PAPER_COLLECT_REF)
-        .doc(paperId)
-        .collection(QUESTION_COLLECT_REF)
+        .doc(subCatId)
+        .collection(MOCK_TEST_COLLECT_REF)
+        .doc(testId)
+        .collection(MOCK_TEST_QUES_COLLECT_REF)
         .withConverter(
             fromFirestore: (snapshot, _) =>
-                QuestionModel.fromJson(snapshot.data()!),
+                AllQuestionModel.fromJson(snapshot.data()!),
             toFirestore: (question, _) => question.toJson());
   }
 }

@@ -1,8 +1,8 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/foundation.dart';
 // import 'package:get/get.dart';
-// import 'package:mcquizadmin/controllers/create_test_controller.dart';
-// import 'package:mcquizadmin/services/firestore_ref_service.dart';
+// import '../controllers/create_test_controller.dart';
+// import '../services/firestore_ref_service.dart';
 //
 // import '../models/test_config_model.dart';
 //

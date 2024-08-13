@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../Utils/tost_snackbar.dart';
-import '../models/category_model.dart';
 import '../models/subject_model.dart';
-import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
-import '../services/upload_category_service.dart';
 import '../services/upload_subject_service.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';

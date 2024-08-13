@@ -2,9 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
-import 'package:mcquizadmin/Utils/tost_snackbar.dart';
-import 'package:mcquizadmin/models/test_paper_model.dart';
-import 'package:mcquizadmin/services/test_config_service.dart';
+
+import '../Utils/tost_snackbar.dart';
 import '../models/all_ques_model.dart';
 import '../models/test_config_model.dart';
 import '../services/firestore_ref_service.dart';
@@ -27,15 +26,21 @@ class CreateTestController extends GetxController {
   RxDouble selectedEachMark = 0.0.obs;
   RxDouble selectedNegativeMark = 0.0.obs;
   RxInt selectedQuestionCount = 0.obs;
+  RxInt selectedQuestionLeft = 0.obs;
   RxString selectedStatus = "".obs;
   RxString selectedTestType = "".obs;
-  RxString selectedQuestion = "".obs;
   RxString selectedQuestionId = "".obs;
   RxBool fieldsChecked = false.obs;
   RxList<AllQuestionModel> questionList = <AllQuestionModel>[].obs;
   RxList<AllQuestionModel> selectedQuestionList = <AllQuestionModel>[].obs;
   var searchQuery = ''.obs;
   RxList<AllQuestionModel> filteredQuestionList = <AllQuestionModel>[].obs;
+
+  RxString testId = "".obs;
+  RxString testTitle = "".obs;
+  RxString testDescription = "".obs;
+  RxBool isUploading = false.obs;
+  RxDouble progress = 0.0.obs;
 
   final UploadQuestionServices _questionServices = UploadQuestionServices();
   late final FirestoreRefService _firestoreRefService;
@@ -47,7 +52,7 @@ class CreateTestController extends GetxController {
     _firestoreRefService = FirestoreRefService();
     fetchTestConfig();
     debounce(searchQuery, (_) => filterQuestions(),
-        time: Duration(milliseconds: 300));
+        time: const Duration(milliseconds: 500));
   }
 
   // check all the fields
@@ -58,31 +63,14 @@ class CreateTestController extends GetxController {
     fieldsChecked.value = selectedTopicId.value != "" ? true : false;
     fieldsChecked.value = selectedTeacherId.value != "" ? true : false;
     fieldsChecked.value = selectedDuration.value != 0 ? true : false;
-    fieldsChecked.value = selectedEachMark.value != 0 ? true : false;
+    fieldsChecked.value = selectedEachMark.value != 0.0 ? true : false;
     fieldsChecked.value = selectedQuestionCount.value != 0 ? true : false;
     fieldsChecked.value = selectedStatus.value != "" ? true : false;
     fieldsChecked.value = selectedTestType.value != "" ? true : false;
-    fieldsChecked.value = selectedQuestion.value != "" ? true : false;
-
-    // selectedNegativeMark.value != "";
-
-    if (fieldsChecked.value == true) {
-      // MockTestModel mockTestModel = MockTestModel(
-      //     owner: selectedTeacher.value,
-      //     id: ,
-      //     categoryId: categoryId,
-      //     subcategoryId: subcategoryId,
-      //     title: title,
-      //     description: description,
-      //     duration: duration,
-      //     totalMarks: totalMarks,
-      //     negativeMarking: negativeMarking,
-      //     status: status,
-      //     examType: examType,
-      //     numberOfQuestions: numberOfQuestions,
-      //     createdAt: createdAt,
-      //     updatedAt: updatedAt);
-    }
+    fieldsChecked.value =
+        selectedQuestionCount.value != 0 && selectedQuestionLeft.value == 0
+            ? true
+            : false;
   }
 
   Future<void> getAllQuestions() async {
@@ -121,8 +109,12 @@ class CreateTestController extends GetxController {
 
     if (isSelected) {
       selectedQuestionList.removeWhere((q) => q.id == question.id);
+      selectedQuestionLeft.value =
+          selectedQuestionCount.value - selectedQuestionList.length;
     } else if (selectedQuestionList.length < selectedQuestionCount.value) {
       selectedQuestionList.add(question);
+      selectedQuestionLeft.value =
+          selectedQuestionCount.value - selectedQuestionList.length;
     } else {
       AppSnackBar.error(
         "Limit Reached ,You can only select ${selectedQuestionCount.value} questions.",

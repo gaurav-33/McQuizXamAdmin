@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mcquizadmin/models/subject_model.dart';
-import 'package:mcquizadmin/services/upload_subject_service.dart';
+
 import '../Utils/tost_snackbar.dart';
+import '../models/subject_model.dart';
+import '../routes/app_routes.dart';
+import '../services/upload_subject_service.dart';
 import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
-import '../routes/app_routes.dart';
-import '../res/app_theme.dart';
 import '../widgets/query_stream_builder.dart';
 
 class SubjectScreen extends StatelessWidget {

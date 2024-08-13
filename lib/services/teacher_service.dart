@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mcquizadmin/Utils/tost_snackbar.dart';
-import 'package:mcquizadmin/models/teacher_model.dart';
-import 'package:mcquizadmin/services/firestore_ref_service.dart';
+
+import '../Utils/tost_snackbar.dart';
+import '../models/teacher_model.dart';
+import '../services/firestore_ref_service.dart';
 
 class TeacherService {
   late final FirestoreRefService _firestoreRefService;

@@ -2,15 +2,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../Utils/file_picker_util.dart';
 import '../Utils/tost_snackbar.dart';
 import '../controllers/upload_progress_controller.dart';
+import '../routes/app_routes.dart';
 import '../services/upload_question_service.dart';
 import '../widgets/liquid_progress_indicator.dart';
-import '../Utils/file_picker_util.dart';
 import '../widgets/rect_button.dart';
-
-import '../res/app_theme.dart';
-import '../routes/app_routes.dart';
 
 class UploadQuestionScreen extends StatelessWidget {
   UploadQuestionScreen({super.key});

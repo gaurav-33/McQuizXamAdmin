@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mcquizadmin/Utils/tost_snackbar.dart';
-import 'package:mcquizadmin/widgets/query_stream_builder.dart';
 
-import '../res/app_theme.dart';
+import '../Utils/tost_snackbar.dart';
+import '../widgets/query_stream_builder.dart';
 
 typedef ItemBuilder<T> = String Function(T item);
 typedef OnChangedCallback<T> = void Function(T item, String id);
@@ -80,6 +79,7 @@ class AppDropDownBtn<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: DropdownButton<String>(
+            icon: const Icon(Icons.keyboard_arrow_down_rounded),
             borderRadius: BorderRadius.circular(40),
             dropdownColor: theme.secondaryHeaderColor,
             itemHeight: null,

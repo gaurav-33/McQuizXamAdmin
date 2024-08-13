@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:mcquizadmin/res/app_theme.dart';
-import 'package:mcquizadmin/res/theme_data.dart';
-import 'package:mcquizadmin/routes/app_routes.dart';
 import 'package:get/get.dart';
 
+import '../res/theme_data.dart';
+import '../routes/app_routes.dart';
 import 'controllers/premission_contoller.dart';
 import 'controllers/upload_progress_controller.dart';
 

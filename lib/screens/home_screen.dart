@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../routes/app_routes.dart';
-import '../services/counter_service.dart';
 import '../widgets/rect_button.dart';
 
 class HomeScreen extends StatelessWidget {

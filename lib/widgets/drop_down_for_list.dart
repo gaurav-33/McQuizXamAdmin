@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../res/app_theme.dart';
 
 class DropDownForList<T> extends StatelessWidget {
   final List<T> items;
@@ -40,6 +39,7 @@ class DropDownForList<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: DropdownButton<T>(
+        icon: const Icon(Icons.keyboard_arrow_down_rounded),
         borderRadius: BorderRadius.circular(40),
         dropdownColor: theme.secondaryHeaderColor,
         isExpanded: true,

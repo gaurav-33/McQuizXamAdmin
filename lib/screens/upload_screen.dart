@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mcquizadmin/models/all_ques_model.dart';
-import 'package:mcquizadmin/services/teacher_service.dart';
-import 'package:mcquizadmin/services/upload_question_service.dart';
-import 'package:mcquizadmin/services/upload_subject_service.dart';
+
+import '../models/all_ques_model.dart';
+import '../models/category_model.dart';
 import '../res/app_theme.dart';
 import '../routes/app_routes.dart';
+import '../services/teacher_service.dart';
 import '../services/upload_category_service.dart';
-import '../models/category_model.dart';
+import '../services/upload_question_service.dart';
+import '../services/upload_subject_service.dart';
 
 class UploadScreen extends StatelessWidget {
   UploadScreen({super.key});
