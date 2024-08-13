@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../models/category_model.dart';
 import '../routes/app_routes.dart';
 import '../services/manage_category_service.dart';

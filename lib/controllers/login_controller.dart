@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../routes/app_routes.dart';
 
 class LoginController extends GetxController {
@@ -20,7 +20,6 @@ class LoginController extends GetxController {
   // Login method
   Future<void> login() async {
     isLoading.value = true;
-    print("gettting Loggingg");
     try {
       await _auth.signInWithEmailAndPassword(
         email: emailController.value.trim(),
@@ -28,7 +27,7 @@ class LoginController extends GetxController {
       );
       AppSnackBar.success("Logged in successfully!");
       // Navigate to home or any other screen after login
-      Get.toNamed(AppRoutes.getHomeRoute());
+      Get.offAllNamed(AppRoutes.getHomeRoute());
     } catch (e) {
       AppSnackBar.error(e.toString());
     } finally {

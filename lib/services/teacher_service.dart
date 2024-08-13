@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../models/teacher_model.dart';
 import '../services/firestore_ref_service.dart';
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../models/test_paper_model.dart';
 import '../services/fetch_test_paper_service.dart';
 
 import '../routes/app_routes.dart';
+import '../widgets/dialog_widget.dart';
 import '../widgets/list_card_box.dart';
 import '../widgets/query_stream_builder.dart';
 import '../widgets/rect_button.dart';
@@ -34,7 +36,7 @@ class TestScreen extends StatelessWidget {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(
             height: 10,
@@ -50,6 +52,7 @@ class TestScreen extends StatelessWidget {
           RectButton(
             name: category,
             height: Get.height * 0.08,
+            width: Get.width *0.8,
           ),
           const SizedBox(
             height: 10,
@@ -57,6 +60,7 @@ class TestScreen extends StatelessWidget {
           RectButton(
             name: subCat,
             height: Get.height * 0.08,
+            width: Get.width *0.8,
           ),
           const SizedBox(
             height: 24,
@@ -79,12 +83,14 @@ class TestScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final doc = documents![index];
                 final MockTestModel testModel = doc.data() as MockTestModel;
-
                 return ListCardBox(
                   title: testModel.title,
                   subtitle: testModel.id,
                   detail: DateFormat("dd-MM-yyyy h:mm a")
                       .format(testModel.updatedAt.toDate()),
+                  deleteFunc: (){
+                    _deleteDialog(context, testModel.id);
+                  },
                 );
               },
             );
@@ -98,4 +104,20 @@ class TestScreen extends StatelessWidget {
       ),
     );
   }
+   void _deleteDialog(BuildContext context, testId) {
+     Get.bottomSheet(
+       backgroundColor: Theme.of(context).cardColor,
+       CustomDialogForm(
+         title: "Want to Delete it?",
+         onCancel: () {
+           Get.back();
+         },
+         onSave: () {
+           _fetchTestPaper.deleteTestPaper(categoryId, subCatId, testId);
+           Get.back();
+           AppSnackBar.error("Deleted");
+         },
+       ),
+     );
+   }
 }

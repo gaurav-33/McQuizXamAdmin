@@ -97,19 +97,22 @@ class LoginScreen extends StatelessWidget {
             ),
             Obx(() => ElevatedButton(
                   onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    // }
-                    loginController.isLoading.value
-                        ? null
-                        : () {
-                      loginController.login();
-                    };
+                    if (_formKey.currentState!.validate()) {
+                      loginController.isLoading.value != false
+                          ? () {}
+                          : loginController.login();
+                    }
                   },
-                  child: loginController.isLoading.value
-                      ? const CircularProgressIndicator()
-                      : SizedBox(
-                          width: Get.width * 0.4,
-                          child: const Center(child: Text("Login"))),
+                  child: SizedBox(
+                      width: Get.width * 0.4,
+                      child: Center(
+                        child: loginController.isLoading.value
+                            ? CircularProgressIndicator(
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                                strokeWidth: 2,
+                              )
+                            : const Text("Login"),
+                      )),
                 )),
           ],
         ),

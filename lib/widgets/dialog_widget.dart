@@ -78,14 +78,14 @@ class CustomDialogForm extends StatelessWidget {
                 MaterialButton(
                   // textColor: theme.focusColor,
                   color: theme.primaryColor,
-                  child: const Text("Cancel"),
                   onPressed: onCancel,
+                  child: const Text("Cancel"),
                 ),
                 MaterialButton(
                   // textColor: theme.focusColor,
                   color: theme.primaryColor,
-                  child: const Text("Save"),
                   onPressed: onSave,
+                  child: const Text("Done"),
                 ),
               ],
             ),

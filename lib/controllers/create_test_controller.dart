@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../models/all_ques_model.dart';
 import '../models/test_config_model.dart';
 import '../services/firestore_ref_service.dart';

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../widgets/query_stream_builder.dart';
 
 typedef ItemBuilder<T> = String Function(T item);

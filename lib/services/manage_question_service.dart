@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../Utils/counter_util.dart';
 import '../Utils/file_picker_util.dart';
-import '../Utils/tost_snackbar.dart';
+import '../Utils/toast_snack_bar.dart';
 import '../controllers/upload_progress_controller.dart';
 import '../models/all_ques_model.dart';
 import '../services/counter_service.dart';

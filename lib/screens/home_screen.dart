@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../Utils/toast_snack_bar.dart';
 import '../routes/app_routes.dart';
 import '../widgets/rect_button.dart';
 
@@ -15,6 +16,13 @@ class HomeScreen extends StatelessWidget {
             "MCQUIZ ADMIN",
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  _displayLogOutDialog();
+                },
+                icon: const Icon(Icons.exit_to_app_rounded))
+          ],
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -59,11 +67,21 @@ class HomeScreen extends StatelessWidget {
                     name: "Upload",
                     icon: Icons.cloud_upload_outlined,
                     ontap: () {
-                      Get.toNamed(AppRoutes.getUploadRoute());
+                      // Get.toNamed(AppRoutes.getUploadRoute());
                     }),
               ],
             ),
           ),
         ));
+  }
+
+  void _displayLogOutDialog() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Get.offAllNamed(AppRoutes.getSplashRoute());
+      AppSnackBar.success("Logged Out SuccessFully");
+    } catch (e) {
+      AppSnackBar.error(e.toString());
+    }
   }
 }
