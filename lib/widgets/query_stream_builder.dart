@@ -24,7 +24,11 @@ class QueryStreamBuilder extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return loadingWidget ??
-              const Center(child: CircularProgressIndicator());
+              Center(
+                  child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Theme.of(context).primaryColor,
+              ));
         } else if (snapshot.hasError) {
           return errorWidget ?? const Center(child: Text('An error occurred'));
         } else if (snapshot.hasData) {

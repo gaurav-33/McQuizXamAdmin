@@ -13,5 +13,6 @@ class UploadProgressController extends GetxController {
       filePath.value = "";
       progress.value = 0.0;
     }
+    isUploading.value != isUploading.value;
   }
 }

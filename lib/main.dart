@@ -3,10 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/premission_contoller.dart';
+import '../controllers/upload_progress_controller.dart';
 import '../res/theme_data.dart';
 import '../routes/app_routes.dart';
-import 'controllers/premission_contoller.dart';
-import 'controllers/upload_progress_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

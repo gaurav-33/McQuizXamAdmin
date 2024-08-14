@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../Utils/toast_snack_bar.dart';
 import '../controllers/create_test_controller.dart';
-import '../controllers/upload_progress_controller.dart';
 import '../models/category_model.dart';
 import '../models/subject_model.dart';
 import '../models/teacher_model.dart';
@@ -27,8 +26,6 @@ class CreateTestScreen extends StatelessWidget {
   final ManageSubjectServices _subjectServices = ManageSubjectServices();
   final TeacherService _teacherService = TeacherService();
   final TextEditingController _searchedText = TextEditingController();
-  final UploadProgressController _uploadProgressController =
-      Get.find<UploadProgressController>();
 
   final TextEditingController _titlecontroller = TextEditingController();
   final TextEditingController _idcontroller = TextEditingController();
@@ -436,6 +433,7 @@ class CreateTestScreen extends StatelessWidget {
       if (testController.progress.value > 0) {
         return Container(
           height: 300,
+          width: Get.width,
           padding: const EdgeInsets.symmetric(vertical: 60),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

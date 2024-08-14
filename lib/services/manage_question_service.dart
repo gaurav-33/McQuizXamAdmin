@@ -7,6 +7,7 @@ import '../Utils/file_picker_util.dart';
 import '../Utils/toast_snack_bar.dart';
 import '../controllers/upload_progress_controller.dart';
 import '../models/all_ques_model.dart';
+import '../routes/app_routes.dart';
 import '../services/counter_service.dart';
 import 'firestore_ref_service.dart';
 
@@ -34,9 +35,9 @@ class ManageQuestionServices {
     }
   }
 
-  Stream<QuerySnapshot> fetchAllQuestion(String subjectId, String topicId) {
-    return _firestoreRefService.getAllQuesRef(subjectId, topicId).snapshots();
-  }
+  // Stream<QuerySnapshot> fetchAllQuestion(String subjectId, String topicId) {
+  //   return _firestoreRefService.getAllQuesRef(subjectId, topicId).snapshots();
+  // }
 
   void updateQuestion(AllQuestionModel questionModel) async {
     await _firestoreRefService
@@ -112,16 +113,16 @@ class ManageQuestionServices {
         optionsList.clear();
         progressController.progress.value = (i / csvLength);
         await Future.delayed(const Duration(milliseconds: 10));
-        progressController.progress.value = 0;
       }
+      progressController.progress.value = 0;
       await counterService.uploadCounter(newQuesId);
-      progressController.isUploading.value = false;
-
       progressController.resetAll();
       AppSnackBar.success("Uploaded All Question");
-    } catch (e) {
+      Get.offAllNamed(AppRoutes.getSubjectRoute());
       progressController.isUploading.value = false;
+    } catch (e) {
       progressController.resetAll();
+      progressController.isUploading.value = false;
       AppSnackBar.error(e.toString());
       if (kDebugMode) {
         print("Error in Iterating ques. $e");

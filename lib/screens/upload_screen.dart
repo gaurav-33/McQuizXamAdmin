@@ -49,93 +49,93 @@ class UploadScreen extends StatelessWidget {
             },
             child: const Text("Upload IT"),
           ),
-          Expanded(
-            child: StreamBuilder(
-                stream: _questionServices.fetchAllQuestion(
-                    "subject_05", "topic_01"),
-                builder: (context, snapshot) {
-                  List categoryDocs = snapshot.data?.docs ?? [];
-                  if (categoryDocs.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "Add Category",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    );
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 200,
-                      width: 200,
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
-                        strokeWidth: 3.0,
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                      itemCount: categoryDocs.length,
-                      itemBuilder: (context, index) {
-                        AllQuestionModel cat = categoryDocs[index].data();
-                        return Card(
-                          // color: Colors.grey[350],
-                          child: ListTile(
-                            onTap: () {},
-                            title: Text(
-                              cat.questionText,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            // subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
-                            //     .format(cat.updatedAt.toDate())),
-                            trailing: Text(cat.id),
-                          ),
-                        );
-                      });
-                }),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Expanded(
-            child: StreamBuilder(
-                stream: _uploadCategoryServices.fetchSubCategory("cat_01"),
-                builder: (context, snapshot) {
-                  List subCatDocs = snapshot.data?.docs ?? [];
-                  if (subCatDocs.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        "Add SubCategory",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    );
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                      height: 200,
-                      width: 200,
-                      child: CircularProgressIndicator(
-                        color: Colors.black,
-                        strokeWidth: 3.0,
-                      ),
-                    );
-                  }
-                  return ListView.builder(
-                      itemCount: subCatDocs.length,
-                      itemBuilder: (context, index) {
-                        SubCategoryModel subcat = subCatDocs[index].data();
-                        return Card(
-                          color: Colors.grey[350],
-                          child: ListTile(
-                            title: Text(subcat.name),
-                            subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
-                                .format(subcat.updatedAt.toDate())),
-                            trailing: Text(subcat.id),
-                          ),
-                        );
-                      });
-                }),
-          ),
+          // Expanded(
+          //   child: StreamBuilder(
+          //       stream: _questionServices.fetchAllQuestion(
+          //           "subject_05", "topic_01"),
+          //       builder: (context, snapshot) {
+          //         List categoryDocs = snapshot.data?.docs ?? [];
+          //         if (categoryDocs.isEmpty) {
+          //           return const Center(
+          //             child: Text(
+          //               "Add Category",
+          //               style: TextStyle(color: Colors.black, fontSize: 15),
+          //             ),
+          //           );
+          //         }
+          //         if (snapshot.connectionState == ConnectionState.waiting) {
+          //           return const SizedBox(
+          //             height: 200,
+          //             width: 200,
+          //             child: CircularProgressIndicator(
+          //               color: Colors.black,
+          //               strokeWidth: 3.0,
+          //             ),
+          //           );
+          //         }
+          //
+          //         return ListView.builder(
+          //             itemCount: categoryDocs.length,
+          //             itemBuilder: (context, index) {
+          //               AllQuestionModel cat = categoryDocs[index].data();
+          //               return Card(
+          //                 // color: Colors.grey[350],
+          //                 child: ListTile(
+          //                   onTap: () {},
+          //                   title: Text(
+          //                     cat.questionText,
+          //                     style: Theme.of(context).textTheme.titleMedium,
+          //                   ),
+          //                   // subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
+          //                   //     .format(cat.updatedAt.toDate())),
+          //                   trailing: Text(cat.id),
+          //                 ),
+          //               );
+          //             });
+          //       }),
+          // ),
+          // const SizedBox(
+          //   height: 50,
+          // ),
+          // Expanded(
+          //   child: StreamBuilder(
+          //       stream: _uploadCategoryServices.fetchSubCategory("cat_01"),
+          //       builder: (context, snapshot) {
+          //         List subCatDocs = snapshot.data?.docs ?? [];
+          //         if (subCatDocs.isEmpty) {
+          //           return const Center(
+          //             child: Text(
+          //               "Add SubCategory",
+          //               style: TextStyle(color: Colors.black, fontSize: 15),
+          //             ),
+          //           );
+          //         }
+          //         if (snapshot.connectionState == ConnectionState.waiting) {
+          //           return const SizedBox(
+          //             height: 200,
+          //             width: 200,
+          //             child: CircularProgressIndicator(
+          //               color: Colors.black,
+          //               strokeWidth: 3.0,
+          //             ),
+          //           );
+          //         }
+          //         return ListView.builder(
+          //             itemCount: subCatDocs.length,
+          //             itemBuilder: (context, index) {
+          //               SubCategoryModel subcat = subCatDocs[index].data();
+          //               return Card(
+          //                 color: Colors.grey[350],
+          //                 child: ListTile(
+          //                   title: Text(subcat.name),
+          //                   subtitle: Text(DateFormat("dd-MM-yyyy h:mm a")
+          //                       .format(subcat.updatedAt.toDate())),
+          //                   trailing: Text(subcat.id),
+          //                 ),
+          //               );
+          //             });
+          //       }),
+          // ),
         ],
       ),
     );

@@ -42,7 +42,6 @@ class CreateTestController extends GetxController {
   RxBool isUploading = false.obs;
   RxDouble progress = 0.0.obs;
 
-  final ManageQuestionServices _questionServices = ManageQuestionServices();
   late final FirestoreRefService _firestoreRefService;
 
   @override
@@ -73,8 +72,12 @@ class CreateTestController extends GetxController {
             : false;
   }
 
+  Stream<QuerySnapshot> _fetchAllQuestion(String subjectId, String topicId) {
+    return _firestoreRefService.getAllQuesRef(subjectId, topicId).snapshots();
+  }
+
   Future<void> getAllQuestions() async {
-    var dataStream = _questionServices.fetchAllQuestion(
+    var dataStream = _fetchAllQuestion(
         selectedSubjectId.value, selectedTopicId.value);
 
     await for (var data in dataStream) {

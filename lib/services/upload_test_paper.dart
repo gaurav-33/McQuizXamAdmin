@@ -98,7 +98,7 @@ class UploadTestPaper {
       testController.isUploading.value = false;
       testController.progress.value = 0;
       AppSnackBar.success("Test Created Successfully");
-      Get.offAllNamed(AppRoutes.getHomeRoute());
+      Get.offAllNamed(AppRoutes.getCreateTestRoute());
     } catch (e) {
       AppSnackBar.error("Can't Create: $e");
       if (kDebugMode) {

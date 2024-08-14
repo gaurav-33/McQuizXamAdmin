@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../Utils/toast_snack_bar.dart';
 import '../routes/app_routes.dart';
 import '../widgets/rect_button.dart';
