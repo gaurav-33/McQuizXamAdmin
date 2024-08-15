@@ -131,12 +131,12 @@ class SubCategoryScreen extends StatelessWidget {
         onSave: () {
           // Create a new TopicModel with the data from the controllers
           SubCategoryModel newSubCat = SubCategoryModel(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            categoryId: _categoryIdcontroller.text.toString(),
-            status: _statuscontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            name: _namecontroller.text.trim().toString(),
+            categoryId: _categoryIdcontroller.text.trim().toLowerCase().toString(),
+            status: _statuscontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           );
@@ -160,7 +160,8 @@ class SubCategoryScreen extends StatelessWidget {
     _namecontroller.text = subCat.name;
     _idcontroller.text = subCat.id;
     _statuscontroller.text = subCat.status;
-    _categoryIdcontroller.text = subCat.categoryId;
+    // _categoryIdcontroller.text = subCat.categoryId;
+    _categoryIdcontroller.text = categoryId;
 
     Get.bottomSheet(
       isDismissible: false,
@@ -177,12 +178,12 @@ class SubCategoryScreen extends StatelessWidget {
         dynamicHint: "Category (cat_01)", // Example of dynamic hint
         onSave: () {
           SubCategoryModel updatedSubCat = subCat.copyWith(
-            id: _idcontroller.text.toString(),
-            categoryId: _categoryIdcontroller.text.toString(),
-            status: _statuscontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            categoryId: _categoryIdcontroller.text.trim().toString(),
+            status: _statuscontroller.text.trim().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text..trim().toString(),
             updatedAt: Timestamp.now(),
           );
           _upload.updateSubCategory(

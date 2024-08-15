@@ -14,8 +14,9 @@ import '../widgets/rect_button.dart';
 class UploadQuestionScreen extends StatelessWidget {
   UploadQuestionScreen({super.key});
 
-  final UploadProgressController progressController = Get.put(UploadProgressController());
-      // Get.find<UploadProgressController>();
+  final UploadProgressController progressController =
+      Get.put(UploadProgressController());
+  // Get.find<UploadProgressController>();
 
   final String subjectId = Get.arguments["subject_id"];
   final String subject = Get.arguments["subject_name"];
@@ -103,10 +104,12 @@ class UploadQuestionScreen extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                overflow: TextOverflow.ellipsis,
-                "File Name: ${progressController.fileName.value}",
-                style: theme.textTheme.bodyLarge,
+              Obx(
+                () => Text(
+                  overflow: TextOverflow.ellipsis,
+                  "File Name: ${progressController.fileName.value}",
+                  style: theme.textTheme.bodyLarge,
+                ),
               ),
               const SizedBox(
                 height: 10,

@@ -18,7 +18,7 @@ class FetchTestPaperService{
   void deleteTestPaper(String categoryId, String subCatId, String testId) async {
     await _firestoreRefService
         .getMockTestRef(categoryId, subCatId)
-        .doc(testId)
+        .doc(testId).collection("allquestions").doc()
         .delete();
   }
 }

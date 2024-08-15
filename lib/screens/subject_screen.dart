@@ -121,10 +121,10 @@ class SubjectScreen extends StatelessWidget {
         onSave: () {
           // Create a new TopicModel with the data from the controllers
           SubjectModel newSubject = SubjectModel(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           );
@@ -158,10 +158,10 @@ class SubjectScreen extends StatelessWidget {
         dynamicHint: "Subject (subject_01)", // Example of dynamic hint
         onSave: () {
           SubjectModel updatedSubject = subject.copyWith(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             updatedAt: Timestamp.now(),
           );
           _upload.updateSubject(subjectId, updatedSubject);

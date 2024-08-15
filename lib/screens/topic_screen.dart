@@ -130,12 +130,12 @@ class TopicScreen extends StatelessWidget {
         onSave: () {
           // Create a new TopicModel with the data from the controllers
           TopicModel newTopic = TopicModel(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            subjectId: _subjectdcontroller.text.toString(),
-            status: _statuscontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            name: _namecontroller.text.trim().toString(),
+            subjectId: _subjectdcontroller.text.trim().toLowerCase().toString(),
+            status: _statuscontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           );
@@ -159,7 +159,8 @@ class TopicScreen extends StatelessWidget {
     _namecontroller.text = topic.name;
     _idcontroller.text = topic.id;
     _statuscontroller.text = topic.status;
-    _subjectdcontroller.text = topic.subjectId;
+    // _subjectdcontroller.text = topic.subjectId;
+    _subjectdcontroller.text = subjectId;
 
     Get.bottomSheet(
       isDismissible: false,
@@ -176,12 +177,12 @@ class TopicScreen extends StatelessWidget {
         dynamicHint: "Subject (subject_01)", // Example of dynamic hint
         onSave: () {
           TopicModel updatedTopic = topic.copyWith(
-            id: _idcontroller.text.toString(),
-            subjectId: _subjectdcontroller.text.toString(),
-            status: _statuscontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            subjectId: _subjectdcontroller.text.trim().toLowerCase().toString(),
+            status: _statuscontroller.text.trim().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             updatedAt: Timestamp.now(),
           );
           _upload.updateTopic(

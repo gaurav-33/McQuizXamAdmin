@@ -117,10 +117,10 @@ class CategoryScreen extends StatelessWidget {
         onSave: () {
           // Create a new TopicModel with the data from the controllers
           CategoryModel newCat = CategoryModel(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             createdAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           );
@@ -155,10 +155,10 @@ class CategoryScreen extends StatelessWidget {
         imageUrlController: _imageUrlcontroller,
         onSave: () {
           CategoryModel updatedCat = cat.copyWith(
-            id: _idcontroller.text.toString(),
-            name: _namecontroller.text.toString(),
-            description: _descriptioncontroller.text.toString(),
-            imageUrl: _imageUrlcontroller.text.toString(),
+            id: _idcontroller.text.trim().toLowerCase().toString(),
+            name: _namecontroller.text.trim().toString(),
+            description: _descriptioncontroller.text.trim().toString(),
+            imageUrl: _imageUrlcontroller.text.trim().toString(),
             updatedAt: Timestamp.now(),
           );
           _upload.updateCategory(catId, updatedCat);

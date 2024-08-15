@@ -477,8 +477,8 @@ class CreateTestScreen extends StatelessWidget {
         onSave: () {
           if (_titlecontroller.text.isNotEmpty) {
             if (testController.isUploading.value == false) {
-              testController.testTitle.value = _titlecontroller.text.toString();
-              testController.testDescription.value = _descriptioncontroller.text.toString();
+              testController.testTitle.value = _titlecontroller.text.trim().toString();
+              testController.testDescription.value = _descriptioncontroller.text.trim().toString();
               UploadTestPaper().uploadTestPaper();
             }
           } else {
